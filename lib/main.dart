@@ -1,5 +1,6 @@
 import 'package:bourboneur/Core/BlogController.dart';
 import 'package:bourboneur/Core/Controller.dart';
+import 'package:bourboneur/pages/capture_payment_details.dart';
 import 'package:bourboneur/pages/sign_in.dart';
 import 'package:bourboneur/pages/splash.dart';
 import 'package:flutter/material.dart';

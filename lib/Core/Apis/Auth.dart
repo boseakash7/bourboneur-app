@@ -32,6 +32,9 @@ class _Auth extends BaseApi {
       return false;
     }
 
+    controller.user.value = User.fromJson(response.body['data']);
+    await utils.saveLocal('user_id', controller.user.value.id!);
+
     return true;
   }
 

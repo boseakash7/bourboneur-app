@@ -1,10 +1,16 @@
 import 'dart:async';
 
+import 'package:bourboneur/Core/Apis/Config.dart';
 import 'package:bourboneur/Core/Apis/User.dart';
+import 'package:bourboneur/Core/Controller.dart';
 import 'package:bourboneur/Core/Utils.dart';
+import 'package:bourboneur/pages/capture_payment_details.dart';
 import 'package:bourboneur/pages/dashboard.dart';
+import 'package:bourboneur/pages/page_helpers/open_dashboard.dart';
+import 'package:bourboneur/pages/select_package.dart';
 import 'package:bourboneur/pages/sign_in.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
@@ -16,6 +22,7 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  Controller controller = Get.find<Controller>();
   VideoPlayerController? _controller;
   Utils utils = Utils();
 
@@ -29,13 +36,18 @@ class _SplashPageState extends State<SplashPage> {
         // Ensure the first frame is shown after the video is initialized
         setState(() {});
 
-        Timer(const Duration(seconds: 2), () { 
-          _tryToLogin();
+        Timer(const Duration(seconds: 5), () { 
+          _prepareToLaunch();
         });
     });
   }
 
-  void _tryToLogin() async {    
+  _prepareToLaunch() async {
+    await _getConfig();
+    await _tryToLogin(); 
+  }
+
+  Future<void> _tryToLogin() async {
     String? id = await utils.getLocal('user_id');
     if ( id == null ) {
       Get.off(() => SignInPage());   
@@ -49,9 +61,13 @@ class _SplashPageState extends State<SplashPage> {
       return;
     }
 
-    Get.off(() => DashboardPage());
+    Get.off(() => openDashboard(controller.user.value));
 
   }
+
+  Future<void> _getConfig() async {
+    bool response = await ConfigApi.all();
+  }  
 
   @override
   Widget build(BuildContext context) {

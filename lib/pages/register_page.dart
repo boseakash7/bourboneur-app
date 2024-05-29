@@ -1,8 +1,12 @@
 import 'package:bourboneur/Core/Apis/Auth.dart';
+import 'package:bourboneur/Core/Controller.dart';
 import 'package:bourboneur/Core/Utils.dart';
 import 'package:bourboneur/common/checkbox_input.dart';
 import 'package:bourboneur/common/custom_button.dart';
 import 'package:bourboneur/common/custom_input.dart';
+import 'package:bourboneur/pages/dashboard.dart';
+import 'package:bourboneur/pages/page_helpers/open_dashboard.dart';
+import 'package:bourboneur/pages/select_package.dart';
 import 'package:bourboneur/pages/sign_in.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +21,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+
+  Controller controller = Get.find<Controller>();
+
   Utils utils = Utils();
   bool isLoading = false;
 
@@ -79,9 +86,8 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() {
       isLoading = false;
     });
-    if (register) {
-      utils.showToast("Success", "Your account is created successfully, please login.");
-      Get.to(() => SignInPage());
+    if (register) {      
+      Get.to(() => openDashboard(controller.user.value));
     }
   }
 

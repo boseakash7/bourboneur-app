@@ -1,8 +1,10 @@
+import 'package:bourboneur/Core/Controller.dart';
 import 'package:bourboneur/common/login_wrapper.dart';
 import 'package:bourboneur/pages/blog.dart';
 import 'package:bourboneur/pages/bluebook.dart';
 import 'package:bourboneur/pages/explore.dart';
 import 'package:bourboneur/pages/good_pour.dart';
+import 'package:bourboneur/pages/select_package.dart';
 import 'package:bourboneur/pages/wheel_of_destiny.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
@@ -18,9 +20,19 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
 
+  Controller controller = Get.find<Controller>();
+
+  bool isLoading = true;
+
+  @override
+  void initState() {    
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return LoginWrapper(
+    return  LoginWrapper(
         child: SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

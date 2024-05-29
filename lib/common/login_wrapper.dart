@@ -3,7 +3,9 @@ import 'package:bourboneur/Core/Controller.dart';
 import 'package:bourboneur/pages/blog.dart';
 import 'package:bourboneur/pages/bluebook.dart';
 import 'package:bourboneur/pages/dashboard.dart';
+import 'package:bourboneur/pages/explore.dart';
 import 'package:bourboneur/pages/good_pour.dart';
+import 'package:bourboneur/pages/portal.dart';
 import 'package:bourboneur/pages/sign_in.dart';
 import 'package:bourboneur/pages/wheel_of_destiny.dart';
 import 'package:flutter/material.dart';
@@ -100,13 +102,16 @@ class _MenuState extends State<Menu> {
             Get.to(() => WheelOfDestiny());
           }),
           MenuItem(text: 'Explore your bourbon', onTap: () {
-
+            Get.to(() => ExplorePage());
           }),
           MenuItem(text: 'Bourbon Suggestions', onTap: () {
             Get.to(() => GoodPourPage());
           }),
           MenuItem(text: 'Bourbon Blog', onTap: () {
             Get.to(() => Blog());
+          }),
+          MenuItem(text: 'Billing', onTap: () {
+            Get.to(() => PortalPage());
           }),
           MenuItem(text: 'Logout', onTap: () {
             Auth.logout();
