@@ -1,10 +1,12 @@
 import 'package:bourboneur/Core/Apis/Auth.dart';
 import 'package:bourboneur/Core/Apis/User.dart';
+import 'package:bourboneur/Core/Controller.dart';
 import 'package:bourboneur/Core/Utils.dart';
 import 'package:bourboneur/common/custom_button.dart';
 import 'package:bourboneur/common/custom_input.dart';
 import 'package:bourboneur/pages/dashboard.dart';
 import 'package:bourboneur/pages/forget_password.dart';
+import 'package:bourboneur/pages/page_helpers/open_dashboard.dart';
 import 'package:bourboneur/pages/register_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,7 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  Controller controller = Get.find<Controller>();
   bool isLoading = false;
   bool isTryToLogin = false;
 
@@ -37,32 +40,10 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController controllerPassword = TextEditingController();
 
   @override
-  void initState() {
+  void initState() {    
     // _tryToLogin();
     super.initState();
   }
-
-  // void _tryToLogin() async {    
-  //   String? id = await utils.getLocal('user_id');
-  //   if ( id == null ) {
-  //     setState(() {
-  //       isTryToLogin = false;
-  //     });
-  //     return;
-  //   }
-
-  //   bool response = await UserApi.getById(id);
-  //   if ( !response ) {
-  //     utils.removeLocal('user_id');
-  //     setState(() {
-  //       isTryToLogin = false;
-  //     });
-  //     return;
-  //   }
-    
-  //   Get.off(() => DashboardPage());
-    
-  // }
 
   void _handleSubmit() async {
     if ( isLoading ) return;
@@ -90,9 +71,7 @@ class _SignInPageState extends State<SignInPage> {
       return;
     }
 
-    // else 
-
-    Get.offAll(() => DashboardPage());
+    Get.offAll(() => openDashboard(controller.user.value));
   }
 
   @override
