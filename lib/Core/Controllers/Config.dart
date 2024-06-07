@@ -3,12 +3,16 @@ class Config {
   String? saveCardUrl;
   String? subscribeNowUrl;
   String? portalUrl;
+  String? termsUrl;
+  String? privacyUrl;
 
   Config({
     this.stripePk,
     this.saveCardUrl,
     this.subscribeNowUrl,
-    this.portalUrl
+    this.portalUrl,
+    this.termsUrl,
+    this.privacyUrl
   });
 
   Config.fromJson(json) {
@@ -16,6 +20,8 @@ class Config {
     saveCardUrl = json['save_card_url'];
     subscribeNowUrl = json['subscribe_now_url'];
     portalUrl = json['portal_url'];
+    termsUrl = json['terms_url'];
+    privacyUrl = json['privacy_url'];
   }
 
   Map<String, dynamic> toJson() {
@@ -23,7 +29,9 @@ class Config {
       "stripe_pk": stripePk,
       'save_card_url': saveCardUrl,
       "subscribe_now_url": subscribeNowUrl,
-      'portal_url': portalUrl
+      'portal_url': portalUrl,
+      'terms_url': termsUrl,
+      'privacy_url': privacyUrl
     };
   }
 }

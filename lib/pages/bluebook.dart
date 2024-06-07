@@ -49,16 +49,13 @@ class _BlueBookState extends State<BlueBook> {
           decoration: const BoxDecoration(
               // color: Colors.red,
               image: DecorationImage(
-                  image: AssetImage("assets/images/bbb-banner.png"),
+                  image: AssetImage("assets/images/bbb-banner2.png"),
                   repeat: ImageRepeat.noRepeat,
                   alignment: Alignment.topCenter,
                   fit: BoxFit.fitWidth)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
+            children: [              
               Text("Bourbon Blue Book",
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -77,30 +74,6 @@ class _BlueBookState extends State<BlueBook> {
               const SizedBox(
                 height: 150,
               ),
-              // const SizedBox(
-              //   height: 15,
-              // ),
-              // Text(
-              //   "(note secondary pricing typically includes costs for shipping)",
-              //   textAlign: TextAlign.center,
-              //   style: Theme.of(context)
-              //       .textTheme
-              //       .bodySmall
-              //       ?.copyWith(fontSize: 10),
-              // ),
-              // const SizedBox(
-              //   height: 20,
-              // ),
-              // Text("Updated 04.03.24",
-              //     textAlign: TextAlign.center,
-              //     style: GoogleFonts.notoSerif(
-              //       color: Theme.of(context).textTheme.titleMedium!.color,
-              //       fontSize: 17,
-              //       fontWeight: FontWeight.bold,
-              //     )),
-              // const SizedBox(
-              //   height: 10,
-              // ),
               TextField(
                 onChanged: _onSearchChanged,
                 style: Theme.of(context)
@@ -134,7 +107,7 @@ class _BlueBookState extends State<BlueBook> {
               ),
               Container(
                 constraints: const BoxConstraints(
-                  maxHeight: 400
+                  maxHeight: 360
                 ),
                 child: SingleChildScrollView(
                   child:  BlueBookTable(
@@ -143,7 +116,7 @@ class _BlueBookState extends State<BlueBook> {
                 ),
               ),
               const SizedBox(
-                height: 30,
+                height: 5,
               ),
               Text(
                 "Developed by a Certified Bourbon Professional, use this Tool to search Thousands of Recent Secondary Sales\nPrices for Coveted Bottles of Brown Water*\nA Regularly Updated Resource for Bourbon (and Rye) Valuation",

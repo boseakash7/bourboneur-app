@@ -52,7 +52,7 @@ class _BlueBookTableState extends State<BlueBookTable> {
           decoration: const BoxDecoration(color: Color(0xFFe17f2f)),
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 12, top: 12, bottom: 12),
+              padding: const EdgeInsets.only(left: 12, top: 12, bottom: 12, right: 12),
               child: Text(
                 "Bottle",
                 style: TextStyle(
@@ -102,9 +102,58 @@ class _BlueBookTableState extends State<BlueBookTable> {
   }
 
   List<TableRow> _prepareTableRows(RxList<BlueBook> result) {
-    if ( isLoading ) return [];
-
     List<TableRow> list = [];
+    if ( isLoading ) {
+      list.add(TableRow(
+          decoration: const BoxDecoration(
+              border: BorderDirectional(
+                  bottom: BorderSide(
+                      color: Color.fromARGB(255, 73, 73, 73), width: 1))),
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 12, top: 12, bottom: 12, right: 12),
+              child: Text(
+                "Loading...",
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.white,
+                    // fontWeight: FontWeight.bold,
+                    fontSize: 12),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 12, bottom: 12),
+              child: Text(
+                "",
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.white,
+                    // fontWeight: FontWeight.bold,
+                    fontSize: 12),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 12, bottom: 12),
+              child: Text(
+                '',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.white,
+                    // fontWeight: FontWeight.bold,
+                    fontSize: 12),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 12, bottom: 12, right: 12),
+              child: Text(
+                "",
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.white,
+                    // fontWeight: FontWeight.bold,
+                    fontSize: 12),
+              ),
+            )
+          ]));
+          return list;
+    }
+    
     for (BlueBook bluebook in result.value) {
 
       if ( widget.keyword != null && widget.keyword != "" )
@@ -120,7 +169,7 @@ class _BlueBookTableState extends State<BlueBookTable> {
                       color: Color.fromARGB(255, 73, 73, 73), width: 1))),
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 12, top: 12, bottom: 12),
+              padding: const EdgeInsets.only(left: 12, top: 12, bottom: 12, right: 12),
               child: Text(
                 bluebook.bottleName!,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
