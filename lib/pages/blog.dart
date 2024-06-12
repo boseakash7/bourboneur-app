@@ -95,12 +95,12 @@ class _BlogState extends State<Blog> {
               const SizedBox(
                 height: 30,
               ),
-              Text("BOURBONEUR BLOG",
+              Text("Bourboneur Blog",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontFamily: 'BebasNeue',
+                      fontFamily: 'Arial',
                       color: Theme.of(context).textTheme.bodySmall?.color,
-                      fontSize: 40,
+                      fontSize: 35,
                       height: 1)),
               const SizedBox(
                 height: 50,

@@ -1,11 +1,14 @@
 import 'dart:ffi';
 
+import 'package:bourboneur/Core/Apis/Auth.dart';
 import 'package:bourboneur/Core/Apis/Package.dart';
 import 'package:bourboneur/Core/Controller.dart';
 import 'package:bourboneur/Core/Controllers/Package.dart';
 import 'package:bourboneur/Core/Utils.dart';
 import 'package:bourboneur/common/custom_button.dart';
 import 'package:bourboneur/pages/capture_payment_details.dart';
+import 'package:bourboneur/pages/sign_in.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -219,7 +222,32 @@ class _PackageFormState extends State<PackageForm> {
               ),
             )
           ],
-        )
+        ),
+        SizedBox(
+          height: 70,
+        ),
+         Container(
+                alignment: Alignment.center,
+                child: Text.rich(TextSpan(children: [
+                  TextSpan(
+                    text: "Want to change account? ",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith( color: const Color(0xffbfbfbf)),
+                  ),
+                  TextSpan(
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Auth.logout();
+                        Get.offAll(() => SignInPage());
+                      },
+                    text: "Logout",
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: const Color(0xFFff8202), fontSize: 12),
+                  ),
+                ])),
+              )
       ],
     );
   }

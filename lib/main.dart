@@ -26,8 +26,9 @@ class MyApp extends StatelessWidget {
       
         textTheme: TextTheme(
           headlineSmall: const TextStyle(color: Color(0xFFd5bb9b)),
-          headlineMedium: GoogleFonts.notoSans(
-            color: Color(0xFFd5bb9b),
+          headlineMedium: const TextStyle(
+            fontFamily: 'Arial',
+            color: Color(0xFFd5bb9b),            
             fontSize: 28, 
             fontWeight: FontWeight.bold,
           ),
@@ -37,16 +38,18 @@ class MyApp extends StatelessWidget {
           displaySmall: const TextStyle(color: Colors.white),
           bodyLarge: const TextStyle(color: Colors.white),
           bodyMedium: const TextStyle(color: Color(0xFFd5bb9b)),
-          bodySmall: GoogleFonts.notoSans(
+          bodySmall:  const TextStyle(
+            fontFamily: 'Arial',
             color: Color(0xFFd5bb9b),
             fontSize: 14,
           ),
-          labelMedium: GoogleFonts.notoSans(
+          labelMedium:  const TextStyle(
+            fontFamily: 'Arial',
             color: Colors.white,
             fontSize: 14,
           ),          
           titleMedium:  const TextStyle(
-            fontFamily: 'TradeGothic',
+            fontFamily: 'Arial',
             fontWeight: FontWeight.bold,                 
             color: Color(0xFFd5bb9b),
             fontSize: 14,

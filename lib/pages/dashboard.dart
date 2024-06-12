@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -51,12 +52,12 @@ class _DashboardPageState extends State<DashboardPage> {
                   repeat: ImageRepeat.noRepeat
                 )),
             child: Text(
-              "ELEVATE\nYOUR SPIRIT",
+              "Elevate\nYour Spirit",
               style: TextStyle(
-                  fontFamily: 'BebasNeue',
+                  fontFamily: 'Arial',
                   color: Theme.of(context).textTheme.titleMedium?.color,                  
-                  fontSize: 40,
-                  height: 1                  
+                  fontSize: 35,
+                  height: 1.2         
                 ),
             ),
           ),
@@ -94,6 +95,38 @@ class _DashboardPageState extends State<DashboardPage> {
             onTap: () {
               Get.to(() => Blog());
             },
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SocialIcon(
+                onTap: () {
+                   launchUrl(Uri.parse('https://www.facebook.com/Bourboneur/'));
+                },
+                icon: 'assets/images/social/facebook.png',
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              SocialIcon(
+                onTap: () {
+                  launchUrl(Uri.parse('https://www.instagram.com/thebourboneur/'));
+                },
+                icon: 'assets/images/social/instagram.png'
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              SocialIcon(
+                onTap: () {
+                  launchUrl(Uri.parse('https://www.instagram.com/thebourboneur/'));
+                },
+                icon: 'assets/images/social/instagram.png'
+              )
+            ],
           )
         ],
       ),
@@ -128,6 +161,32 @@ class DashBoardLinkItem extends StatelessWidget {
               fontWeight: FontWeight.bold,
               fontSize: 18),
         ),
+      ),
+    );
+  }
+}
+
+class SocialIcon extends StatelessWidget {
+  SocialIcon({
+    super.key,
+    this.onTap,
+    required this.icon
+  });
+
+  void Function()? onTap;
+  String icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(7),
+        decoration: const BoxDecoration(
+          color: Color(0xffff7520),
+          borderRadius: BorderRadius.all(Radius.circular(50))
+        ),
+        child: Image.asset(icon, width: 20),
       ),
     );
   }

@@ -57,7 +57,7 @@ class _SplashPageState extends State<SplashPage> {
       return;
     }
 
-    // Get.off(() => openDashboard(controller.user.value));
+    Get.off(() => openDashboard(controller.user.value));
 
   }
 
