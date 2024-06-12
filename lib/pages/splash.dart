@@ -10,7 +10,7 @@ import 'package:bourboneur/pages/page_helpers/open_dashboard.dart';
 import 'package:bourboneur/pages/select_package.dart';
 import 'package:bourboneur/pages/sign_in.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 

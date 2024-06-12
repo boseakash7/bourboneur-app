@@ -4,7 +4,7 @@ import 'package:bourboneur/Core/Utils.dart';
 import 'package:bourboneur/pages/dashboard.dart';
 import 'package:bourboneur/pages/page_helpers/open_dashboard.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
