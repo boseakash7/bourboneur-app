@@ -103,9 +103,13 @@ class Wheel extends StatelessWidget {
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: FortuneWheel(
               onAnimationEnd: onSpinEnd,
-              physics: NoPanPhysics(),
+              physics: NoPanPhysics(
+
+              ),
               selected: controller!.stream,
               animateFirst: false,
+              curve: Curves.easeInOut,
+              rotationCount: 7,
               styleStrategy: UniformStyleStrategy(
                   textStyle: Theme.of(context).textTheme.bodySmall),
               indicators: [

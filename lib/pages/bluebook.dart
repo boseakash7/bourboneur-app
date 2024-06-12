@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'package:bourboneur/Core/Apis/Bluebook.dart';
+import 'package:bourboneur/Core/Controller.dart';
 import 'package:bourboneur/common/login_wrapper.dart';
 import 'package:bourboneur/pages/bluebook/bluebook_table.dart';
+import 'package:bourboneur/pages/bluebook/personal_use.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BlueBook extends StatefulWidget {
@@ -18,23 +22,35 @@ class _BlueBookState extends State<BlueBook> {
 
   TextEditingController searchController = TextEditingController();
 
+  Controller controller = Get.find<Controller>();
 
   @override
   void initState() {
-    
+    getData();
     super.initState();
   }
 
   _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
-        setState(() {
-          keyword = query;
-        });
+      setState(() {
+        keyword = query;
+      });
     });
   }
 
-@override
+  _onTapPersonalUse() {
+    showAdaptiveDialog(context: context, builder: (BuildContext context) {
+      return PersonalUse();
+    });
+  }
+
+  void getData() async {
+    await BlueBookApi.lastUpdatedAt();
+    setState(() {});
+  }
+
+  @override
   void dispose() {
     _debounce?.cancel();
     super.dispose();
@@ -49,22 +65,23 @@ class _BlueBookState extends State<BlueBook> {
           decoration: const BoxDecoration(
               // color: Colors.red,
               image: DecorationImage(
-                  image: AssetImage("assets/images/bbb-banner.png"),
+                  image: AssetImage("assets/images/bbb-banner2.png"),
                   repeat: ImageRepeat.noRepeat,
                   alignment: Alignment.topCenter,
                   fit: BoxFit.fitWidth)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(
-                height: 10,
+                height: 62,
               ),
-              Text("Bourbon Blue Book",
+              Text("Bourbon Blue Book™",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontFamily: 'BebasNeue',
+                      fontFamily: 'Arial',
                       color: Theme.of(context).textTheme.bodySmall?.color,
-                      fontSize: 40,
+                      fontSize: 35,
                       height: 1)),
               Text(
                   "Real, Accurate Values.\nSearch prices of thousands of bottles.",
@@ -73,34 +90,18 @@ class _BlueBookState extends State<BlueBook> {
                       fontFamily: 'Arial',
                       color: Theme.of(context).textTheme.titleMedium!.color,
                       fontSize: 12,
-                      height: 1.2)),
+                      height: 1.3)),              
+              
+              Text(controller.lastUpdate.value.bluebook_readable != null ? "Updated ${controller.lastUpdate.value.bluebook_readable}" : "Loading...",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      color: Theme.of(context).textTheme.titleMedium!.color,
+                      fontSize: 12,
+                      height: 1.3)),
               const SizedBox(
-                height: 150,
+                height: 62,
               ),
-              // const SizedBox(
-              //   height: 15,
-              // ),
-              // Text(
-              //   "(note secondary pricing typically includes costs for shipping)",
-              //   textAlign: TextAlign.center,
-              //   style: Theme.of(context)
-              //       .textTheme
-              //       .bodySmall
-              //       ?.copyWith(fontSize: 10),
-              // ),
-              // const SizedBox(
-              //   height: 20,
-              // ),
-              // Text("Updated 04.03.24",
-              //     textAlign: TextAlign.center,
-              //     style: GoogleFonts.notoSerif(
-              //       color: Theme.of(context).textTheme.titleMedium!.color,
-              //       fontSize: 17,
-              //       fontWeight: FontWeight.bold,
-              //     )),
-              // const SizedBox(
-              //   height: 10,
-              // ),
               TextField(
                 onChanged: _onSearchChanged,
                 style: Theme.of(context)
@@ -114,36 +115,33 @@ class _BlueBookState extends State<BlueBook> {
                   hintStyle: TextStyle(
                       color: Colors.white,
                       fontSize: 12,
-                      height: 1.2,
+                      height: 2.5,
                       fontWeight: FontWeight.normal),
                   enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromARGB(92, 195, 109, 39), width: 1),
+                      borderSide: BorderSide(
+                          color: Color.fromARGB(92, 195, 109, 39), width: 1),
                       borderRadius: BorderRadius.zero),
                   focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromARGB(92, 195, 109, 39), width: 1),
-                      borderRadius: BorderRadius.zero),                  
+                      borderSide: BorderSide(
+                          color: Color.fromARGB(92, 195, 109, 39), width: 1),
+                      borderRadius: BorderRadius.zero),
                   border: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromARGB(92, 195, 109, 39), width: 1),
+                      borderSide: BorderSide(
+                          color: Color.fromARGB(92, 195, 109, 39), width: 1),
                       borderRadius: BorderRadius.zero),
                   isDense: true,
                   filled: false,
                 ),
               ),
               Container(
-                constraints: const BoxConstraints(
-                  maxHeight: 400
-                ),
+                constraints: const BoxConstraints(maxHeight: 360),
                 child: SingleChildScrollView(
-                  child:  BlueBookTable(
-                    keyword: keyword,
-                  )
-                ),
+                    child: BlueBookTable(
+                  keyword: keyword,
+                )),
               ),
               const SizedBox(
-                height: 30,
+                height: 5,
               ),
               Text(
                 "Developed by a Certified Bourbon Professional, use this Tool to search Thousands of Recent Secondary Sales\nPrices for Coveted Bottles of Brown Water*\nA Regularly Updated Resource for Bourbon (and Rye) Valuation",
@@ -153,6 +151,27 @@ class _BlueBookState extends State<BlueBook> {
                     .bodySmall
                     ?.copyWith(fontSize: 10, color: Color(0xffe17f2f)),
               ),
+              GestureDetector(
+                onTap: _onTapPersonalUse,
+                child: SizedBox(
+                  height: 12,
+                  child: Text(
+                "*Personal Use Only",
+                textAlign: TextAlign.center,                
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(
+                      fontSize: 10, 
+                      color: Color(0xffe17f2f), 
+                      decoration: TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.solid,
+                      decorationThickness: 1,
+                      decorationColor: Color(0xffe17f2f)
+                    ),
+              ),
+                ),
+              )
             ],
           ),
         ),

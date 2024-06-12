@@ -121,14 +121,14 @@ class SpicyEarthyQuadBox extends StatelessWidget {
                 left: -30,
                 child: Transform.rotate(
                   angle: -math.pi / 2,
-                  child: Text("Earty",
+                  child: Text("earty",
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.bold, color: mainQuadColor)),
                 )),
             Positioned(
                 top: -24,
                 right: QuadBox.width / 2 - 10,
-                child: Text("Spicy",
+                child: Text("spicy",
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.bold, color: mainQuadColor))),
             Row(

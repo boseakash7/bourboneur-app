@@ -35,7 +35,7 @@ class WiningPopup extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "and you are drinking,",
+                    "and you're drinking,",
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Colors.white,
                       fontSize: 25
@@ -52,12 +52,12 @@ class WiningPopup extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
                   Text(
                     "Pour it and Score it!",
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.white
+                      color: const Color(0xffbfbfbf)
                     ),
                   ),
                 ],

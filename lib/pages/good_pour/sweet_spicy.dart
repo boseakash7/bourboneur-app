@@ -68,7 +68,7 @@ class _SweetSpicyQuadState extends State<SweetSpicyQuad> {
                 )
               ])),
           const Text(
-            "PROPRIETARY ANALYSIS",
+            "Proprietary Analysis",
             textAlign: TextAlign.center,
           ),
           const SizedBox(
