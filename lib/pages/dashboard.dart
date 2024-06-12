@@ -122,9 +122,9 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               SocialIcon(
                 onTap: () {
-                  launchUrl(Uri.parse('https://www.instagram.com/thebourboneur/'));
+                  launchUrl(Uri.parse('https://www.tiktok.com/@bourboneur'));
                 },
-                icon: 'assets/images/social/instagram.png'
+                icon: 'assets/images/social/tik-tok.png'
               )
             ],
           )
