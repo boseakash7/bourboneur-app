@@ -81,7 +81,7 @@ class _BlueBookState extends State<BlueBook> {
                 style: TextStyle(
                       fontFamily: 'Arial',
                       color: Theme.of(context).textTheme.bodySmall?.color,
-                      fontSize: 35,
+                      fontSize: 32,
                       height: 1),
                 TextSpan(
                   text: "Bourbon Blue Book",
