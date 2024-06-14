@@ -251,11 +251,17 @@ class _WheelOfDestinyState extends State<WheelOfDestiny> {
                       height: 1),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 30),
+              const SizedBox(
+                height: 5,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 30),
                 child: Text(
                   "start drinking!",
                   textAlign: TextAlign.left,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial'),
                 ),
               ),
               Wheel(
@@ -323,8 +329,7 @@ class _WheelOfDestinyState extends State<WheelOfDestiny> {
                     Text(
                         "add your bottles to the list below\nand spin to select your drink",
                         textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: const Color(0xFFf0f0f0),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
                             fontSize: 17,
                             fontFamily: 'Arial')),
                     const SizedBox(

@@ -106,7 +106,7 @@ class _GoodPourTableState extends State<GoodPourTable> {
             height: 70,
           ),
           Text.rich(
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.left,
               style: TextStyle(
                   fontFamily: 'BebasNeue',
                   color: Theme.of(context).textTheme.bodySmall?.color,
@@ -127,20 +127,22 @@ class _GoodPourTableState extends State<GoodPourTable> {
                   ),
                 )
               ])),
-          const Text(
-            "PROPRIETARY ANALYSIS",
-            textAlign: TextAlign.center,
+          Text(
+            "Proprietary Analysis",
+            textAlign: TextAlign.left,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial'),
           ),
           const SizedBox(
             height: 30,
           ),
           Text(
             getTableSubTextText(),
-            textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(color: const Color(0xffe07e2f))
+            textAlign: TextAlign.left,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial')
           ),
           const SizedBox(
             height: 20,
