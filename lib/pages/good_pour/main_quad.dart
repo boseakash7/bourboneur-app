@@ -42,7 +42,7 @@ class _MainQuadState extends State<MainQuad> {
                 height: 70,
               ),
               Text("Find a good pour,",
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.left,
                 style: TextStyle(
                   fontFamily: 'Arial',
                   color: Theme.of(context).textTheme.bodySmall?.color,                  
@@ -50,9 +50,12 @@ class _MainQuadState extends State<MainQuad> {
                   height: 1
                 ),
               ),
-              const Text(                
+              Text(                
                 "let us suggest a bourbon",
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial'),
               ),              
               const SizedBox(
                 height: 50,
@@ -69,10 +72,10 @@ class _MainQuadState extends State<MainQuad> {
               ),
               Text(
                 "tap a quadrant below to find custom suggestions that fit your taste!",
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: const Color(0xffe07e2f)
-                ),
+                textAlign: TextAlign.left,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial'),
               ),
               
             ],

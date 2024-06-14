@@ -45,7 +45,7 @@ class _SweetFruitQuadState extends State<SweetFruitQuad> {
             height: 70,
           ),
           Text.rich(
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.left,
               style: TextStyle(
                   fontFamily: 'BebasNeue',
                   color: Theme.of(context).textTheme.bodySmall?.color,
@@ -66,9 +66,12 @@ class _SweetFruitQuadState extends State<SweetFruitQuad> {
                   ),
                 )
               ])),
-          const Text(
-            "PROPRIETARY ANALYSIS",
-            textAlign: TextAlign.center,
+          Text(
+            "Proprietary Analysis",
+            textAlign: TextAlign.left,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial'),
           ),
           const SizedBox(
             height: 50,
@@ -83,11 +86,10 @@ class _SweetFruitQuadState extends State<SweetFruitQuad> {
               ),
           Text(
             "Let's get specific.",
-            textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(color: const Color(0xffe07e2f)),
+            textAlign: TextAlign.left,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial'),
           )
         ],
       ),

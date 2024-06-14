@@ -65,7 +65,7 @@ class _BlueBookState extends State<BlueBook> {
           decoration: const BoxDecoration(
               // color: Colors.red,
               image: DecorationImage(
-                  image: AssetImage("assets/images/bbb-banner2.png"),
+                  image: AssetImage("assets/images/bbb-banner.jpg"),
                   repeat: ImageRepeat.noRepeat,
                   alignment: Alignment.topCenter,
                   fit: BoxFit.fitWidth)),
@@ -76,16 +76,31 @@ class _BlueBookState extends State<BlueBook> {
               const SizedBox(
                 height: 62,
               ),
-              Text("Bourbon Blue Book™",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
+              Text.rich(
+                textAlign: TextAlign.left,
+                style: TextStyle(
                       fontFamily: 'Arial',
                       color: Theme.of(context).textTheme.bodySmall?.color,
-                      fontSize: 35,
-                      height: 1)),
+                      fontSize: 32,
+                      height: 1),
+                TextSpan(
+                  text: "Bourbon Blue Book",
+                  children: [
+                    WidgetSpan(
+                      
+                      child: Transform.translate(
+                        offset: Offset(2, -5),
+                        child: Text('™', style: TextStyle(
+                          fontSize: 25
+                        ),),
+                      ),
+                    )
+                  ]
+                )
+              ),
               Text(
-                  "Real, Accurate Values.\nSearch prices of thousands of bottles.",
-                  textAlign: TextAlign.center,
+                  "Real, Accurate Values.\nSearch thousands of recent secondary sales\nprices for coveted bottles of brownwater",
+                  textAlign: TextAlign.left,
                   style: TextStyle(
                       fontFamily: 'Arial',
                       color: Theme.of(context).textTheme.titleMedium!.color,
@@ -93,7 +108,7 @@ class _BlueBookState extends State<BlueBook> {
                       height: 1.3)),              
               
               Text(controller.lastUpdate.value.bluebook_readable != null ? "Updated ${controller.lastUpdate.value.bluebook_readable}" : "Loading...",
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   style: TextStyle(
                       fontFamily: 'Arial',
                       color: Theme.of(context).textTheme.titleMedium!.color,
@@ -143,14 +158,14 @@ class _BlueBookState extends State<BlueBook> {
               const SizedBox(
                 height: 5,
               ),
-              Text(
-                "Developed by a Certified Bourbon Professional, use this Tool to search Thousands of Recent Secondary Sales\nPrices for Coveted Bottles of Brown Water*\nA Regularly Updated Resource for Bourbon (and Rye) Valuation",
-                textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(fontSize: 10, color: Color(0xffe17f2f)),
-              ),
+              // Text(
+              //   "Developed by a Certified Bourbon Professional, use this Tool to search Thousands of Recent Secondary Sales\nPrices for Coveted Bottles of Brown Water*\nA Regularly Updated Resource for Bourbon (and Rye) Valuation",
+              //   textAlign: TextAlign.center,
+              //   style: Theme.of(context)
+              //       .textTheme
+              //       .bodySmall
+              //       ?.copyWith(fontSize: 10, color: Color(0xffe17f2f)),
+              // ),
               GestureDetector(
                 onTap: _onTapPersonalUse,
                 child: SizedBox(

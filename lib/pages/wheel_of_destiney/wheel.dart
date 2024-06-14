@@ -59,6 +59,8 @@ class Wheel extends StatelessWidget {
       if (texts!.length == 1) {
         texts?.add("");
       }
+      // clear the items before adding.
+      items = [];
       texts?.forEach((element) {
         addTextToWheel(element);
       });
