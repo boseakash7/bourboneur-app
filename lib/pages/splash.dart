@@ -96,7 +96,7 @@ class _SplashPageState extends State<SplashPage> {
               children: [
                 Image.asset("assets/images/splash-logo.png", width: 300),
                 Text(
-                  "Helping the world whiskey wise™",
+                  "Helping the world become\nwhiskey wise™",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 18,
