@@ -12,7 +12,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class ChoosePackage extends StatefulWidget {
-  ChoosePackage({super.key});
+  const ChoosePackage({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect

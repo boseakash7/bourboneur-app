@@ -149,7 +149,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: 5,
                 ),
                 CustomCheckBox(
-                  label: "Subscribe to the weekly Blog",
+                  label: "Subscribe to Bourboneur",
                   onChanged: (bool? value) {
                     subscribeToWeeklyBlog = value;
                   },
@@ -169,7 +169,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   alignment: Alignment.center,
                   child: Text.rich(TextSpan(children: [
                     TextSpan(
-                      text: "Already have an account? ",
+                      text: "I’m already a Bourboneur ",
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall

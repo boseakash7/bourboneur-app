@@ -47,14 +47,14 @@ class _WheelOfDestinyState extends State<WheelOfDestiny> {
   TextEditingController data = TextEditingController();
 
   @override
-  void initState() {        
+  void initState() {
     getCreatedWheels();
-    
+
     super.initState();
   }
 
   void getCreatedWheels() async {
-    await WODApi.byUserId(controller.user.value.id!);    
+    await WODApi.byUserId(controller.user.value.id!);
     setState(() {});
   }
 
@@ -85,52 +85,52 @@ class _WheelOfDestinyState extends State<WheelOfDestiny> {
       return;
     }
 
-    showDialog(context: context, builder: (BuildContext context) {
-      return SavePopup(
-        name: name,
-        onSubmit: _handleSubmit,
-      );
-    });
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SavePopup(
+            name: name,
+            onSubmit: _handleSubmit,
+          );
+        });
   }
 
   void _handleSubmit(String name) async {
-
-    if ( isSaveLoading ) return;
+    if (isSaveLoading) return;
     Navigator.of(context).pop();
 
     setState(() {
       isSaveLoading = true;
     });
 
+    var response = isEditing
+        ? await WODApi.update(
+            id!, controller.user.value.id!, name, data.value.text)
+        : await WODApi.create(controller.user.value.id!, name, data.value.text);
 
-    var response = isEditing ?
-      await WODApi.update(id!, controller.user.value.id!, name, data.value.text)
-    : await WODApi.create(controller.user.value.id!, name, data.value.text);
-
-     if ( response != false ) {
-        setState(() {
-          id = response;
-          this.name = name;
-          isEditing = true;
-          isSaveLoading = false;
-        });
-        utils.showToast("Success", "Saved successfully");
-     } else {
+    if (response != false) {
       setState(() {
-         isSaveLoading = false;
+        id = response;
+        this.name = name;
+        isEditing = true;
+        isSaveLoading = false;
       });
-     }
+      utils.showToast("Success", "Saved successfully");
+    } else {
+      setState(() {
+        isSaveLoading = false;
+      });
+    }
   }
 
   void _handleImport() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.any
-    );
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.any);
 
     if (result != null) {
       String name = result.files.single.name;
-      List<String> arr  = name.split(".");
-      if ( arr.last != "csv" ) {
+      List<String> arr = name.split(".");
+      if (arr.last != "csv") {
         utils.showToast("Error", "Please select a csv file");
         return;
       }
@@ -138,7 +138,8 @@ class _WheelOfDestinyState extends State<WheelOfDestiny> {
       // now the csv file is selected.
       // Csv
       String input = await File(result.files.single.path!).readAsString();
-      List<List<dynamic>> rowsAsListOfValues = const CsvToListConverter().convert(input, eol: "\n", convertEmptyTo: '');
+      List<List<dynamic>> rowsAsListOfValues = const CsvToListConverter()
+          .convert(input, eol: "\n", convertEmptyTo: '');
       List finalValue = rowsAsListOfValues.map((e) {
         return e.join(" ");
       }).toList();
@@ -147,43 +148,41 @@ class _WheelOfDestinyState extends State<WheelOfDestiny> {
       _handleOnTextChange(text);
 
       return;
-
     } else {
       // User canceled the picker
     }
   }
 
-  void _handleOpen()
-  {
-    if ( isOpenLoading ) return;
+  void _handleOpen() {
+    if (isOpenLoading) return;
 
-    showDialog(context: context, builder: (BuildContext context) {
-      return OpenPopup(
-        onTapDelete: _deleteById,
-        onTapOpen: _loadById,
-      );
-    });
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return OpenPopup(
+            onTapDelete: _deleteById,
+            onTapOpen: _loadById,
+          );
+        });
   }
 
   void _handleSpinEnd() {
     String text = items.elementAt(winingIndex!).toString();
 
-    showDialog(context: context, builder: (BuildContext context) {
-      return WiningPopup(
-        text: text
-      );
-    });
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return WiningPopup(text: text);
+        });
   }
 
   void _loadById(String id) async {
-
-    
     setState(() {
       isOpenLoading = true;
     });
-    
+
     bool response = await WODApi.getById(id);
-    if ( !response ) {
+    if (!response) {
       setState(() {
         isOpenLoading = false;
       });
@@ -192,39 +191,34 @@ class _WheelOfDestinyState extends State<WheelOfDestiny> {
 
     this.id = controller.wod.value.id!;
     name = controller.wod.value.name!;
-    data.value = TextEditingValue(
-      text: controller.wod.value.data!
-    );
+    data.value = TextEditingValue(text: controller.wod.value.data!);
     isEditing = true;
     _handleOnTextChange(data.value.text);
     setState(() {
       isOpenLoading = false;
     });
-
   }
 
   void _deleteById(String id) async {
-
     setState(() {
       isOpenLoading = true;
     });
 
     bool response = await WODApi.deleteById(id);
-    if ( !response ) {
+    if (!response) {
       setState(() {
         isOpenLoading = false;
       });
       return;
     }
 
-
-    if ( this.id == id ) {
+    if (this.id == id) {
       // close the data
       this.id = null;
       name = null;
       data.value = TextEditingValue();
-       _handleOnTextChange("");
-       isEditing = false;
+      _handleOnTextChange("");
+      isEditing = false;
     }
 
     setState(() {
@@ -243,25 +237,37 @@ class _WheelOfDestinyState extends State<WheelOfDestiny> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(
-                height: 50,
+                height: 20,
               ),
-              Text(
-                "STOP THINKING",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontFamily: 'BebasNeue',
-                    color: Theme.of(context).textTheme.bodySmall?.color,
-                    fontSize: 40,
-                    height: 1),
+              Padding(
+                padding: EdgeInsets.only(left: 30),
+                child: Text(
+                  "stop thinking,",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontFamily: 'Arial',
+                      color: Theme.of(context).textTheme.bodySmall?.color,
+                      fontSize: 35,
+                      height: 1),
+                ),
               ),
-              const Text(
-                "START DRINKING!",
-                textAlign: TextAlign.center,
+              const SizedBox(
+                height: 5,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 30),
+                child: Text(
+                  "start drinking!",
+                  textAlign: TextAlign.left,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial'),
+                ),
               ),
               Wheel(
                 controller: _streamController,
-                texts: items, 
-                onSpinEnd: _handleSpinEnd,          
+                texts: items,
+                onSpinEnd: _handleSpinEnd,
                 onTapSpin: () {
                   if (items.length <= 1) {
                     showDialog(
@@ -318,12 +324,12 @@ class _WheelOfDestinyState extends State<WheelOfDestiny> {
               Padding(
                 padding: EdgeInsets.only(left: 30, right: 30),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
                         "add your bottles to the list below\nand spin to select your drink",
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: const Color(0xFFf0f0f0),
+                        textAlign: TextAlign.left,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
                             fontSize: 17,
                             fontFamily: 'Arial')),
                     const SizedBox(
@@ -348,17 +354,17 @@ class _WheelOfDestinyState extends State<WheelOfDestiny> {
                           text: "IMPORT",
                           onTap: _handleImport,
                         ),
-                        if ( controller.wods.isNotEmpty )
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        if ( controller.wods.isNotEmpty )
-                        WheelActionButtons(
-                          image: "assets/images/import_button.png",
-                          text: "OPEN",
-                          onTap: _handleOpen,
-                          isLoading: isOpenLoading,
-                        )
+                        if (controller.wods.isNotEmpty)
+                          const SizedBox(
+                            width: 20,
+                          ),
+                        if (controller.wods.isNotEmpty)
+                          WheelActionButtons(
+                            image: "assets/images/import_button.png",
+                            text: "OPEN",
+                            onTap: _handleOpen,
+                            isLoading: isOpenLoading,
+                          )
                       ],
                     ),
                     const SizedBox(

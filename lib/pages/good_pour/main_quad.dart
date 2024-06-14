@@ -42,17 +42,20 @@ class _MainQuadState extends State<MainQuad> {
                 height: 70,
               ),
               Text("Find a good pour,",
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.left,
                 style: TextStyle(
-                  fontFamily: 'BebasNeue',
+                  fontFamily: 'Arial',
                   color: Theme.of(context).textTheme.bodySmall?.color,                  
-                  fontSize: 40,
+                  fontSize: 35,
                   height: 1
                 ),
               ),
-              const Text(                
-                "LET US SUGGEST A BOURBON!",
-                textAlign: TextAlign.center,
+              Text(                
+                "let us suggest a bourbon",
+                textAlign: TextAlign.left,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial'),
               ),              
               const SizedBox(
                 height: 50,
@@ -69,10 +72,10 @@ class _MainQuadState extends State<MainQuad> {
               ),
               Text(
                 "tap a quadrant below to find custom suggestions that fit your taste!",
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: const Color(0xffe07e2f)
-                ),
+                textAlign: TextAlign.left,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial'),
               ),
               
             ],
@@ -94,6 +97,11 @@ class MainQuadBox extends StatelessWidget {
 
   Color? mainQuadColor = const Color(0xFFff8202);
   Color? centerQuadColor = const Color(0xFF70370a);
+  Color? topLeft = const Color(0xffff8203);
+  Color? topRight = const Color(0xffda6d0e);
+  Color? bottomLeft = const Color(0xffffff00);
+  Color? bottomRight = const Color(0xffeab200);
+
   void Function()? onTapSpicyEarthy;
   void Function()? onTapEarthyFruity;
   void Function()? onTapSweetFruity;
@@ -108,11 +116,11 @@ class MainQuadBox extends StatelessWidget {
         children: [
           Transform.rotate(
             angle: -math.pi / 2,
-            child: QuadText(text: "Earthy", color: mainQuadColor),
+            child: QuadText(text: "earthy", color: mainQuadColor),
           ),
           Column(
             children: [
-              QuadText(text: "Spicy", color: mainQuadColor),
+              QuadText(text: "spicy", color: mainQuadColor),
               const SizedBox(
                 height: 5,
               ),
@@ -123,14 +131,14 @@ class MainQuadBox extends StatelessWidget {
                       Row(
                         children: [
                           QuadBox(
-                            color: mainQuadColor,
+                            color: topLeft,
                             onTap: onTapSpicyEarthy,
                           ),
                           const SizedBox(
                             width: 10,
                           ),
                           QuadBox(
-                            color: mainQuadColor,
+                            color: topRight,
                             onTap: onTapSweetSpicy,
                           ),
                         ],
@@ -141,14 +149,14 @@ class MainQuadBox extends StatelessWidget {
                       Row(
                         children: [
                           QuadBox(
-                            color: mainQuadColor,
+                            color: bottomLeft,
                             onTap: onTapEarthyFruity,
                           ),
                           const SizedBox(
                             width: 10,
                           ),
                           QuadBox(
-                            color: mainQuadColor,
+                            color: bottomRight,
                             onTap: onTapSweetFruity,
                           ),
                         ],
@@ -156,8 +164,8 @@ class MainQuadBox extends StatelessWidget {
                     ],
                   ),
                   Positioned(
-                      left: QuadBox.width / 2,
-                      top: QuadBox.width / 2,
+                      left: QuadBox.width / 2 + 5,
+                      top: QuadBox.width / 2 + 5,
                       child: QuadBox(
                         color: centerQuadColor,
                         onTap: onTapCenter,
@@ -167,12 +175,12 @@ class MainQuadBox extends StatelessWidget {
               const SizedBox(
                 height: 5,
               ),
-              QuadText(text: "Fruity", color: mainQuadColor),
+              QuadText(text: "fruity", color: mainQuadColor),
             ],
           ),
           Transform.rotate(
             angle: math.pi / 2,
-            child: QuadText(text: "Sweet", color: mainQuadColor),
+            child: QuadText(text: "sweet", color: mainQuadColor),
           ),
         ],
       ),

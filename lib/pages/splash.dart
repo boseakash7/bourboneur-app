@@ -4,13 +4,9 @@ import 'package:bourboneur/Core/Apis/Config.dart';
 import 'package:bourboneur/Core/Apis/User.dart';
 import 'package:bourboneur/Core/Controller.dart';
 import 'package:bourboneur/Core/Utils.dart';
-import 'package:bourboneur/pages/capture_payment_details.dart';
-import 'package:bourboneur/pages/dashboard.dart';
 import 'package:bourboneur/pages/page_helpers/open_dashboard.dart';
-import 'package:bourboneur/pages/select_package.dart';
 import 'package:bourboneur/pages/sign_in.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
@@ -73,6 +69,7 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
+        fit: StackFit.expand,
         children: [
           SizedBox.expand(
             child: FittedBox(
@@ -93,9 +90,21 @@ class _SplashPageState extends State<SplashPage> {
               color: Colors.black.withOpacity(0.8),
             ),
           ),
-          Center(
-            child: Image.asset("assets/images/splash-logo.png", width: 300),
-          )
+          Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset("assets/images/splash-logo.png", width: 300),
+                Text(
+                  "Helping the world whiskey wise™",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontSize: 18,
+                    color: Colors.white
+                  ),
+                )
+              ],
+            )
         ],
       ),
     );

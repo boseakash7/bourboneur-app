@@ -45,7 +45,7 @@ class _EarthyFruitQuadState extends State<EarthyFruitQuad> {
             height: 70,
           ),
           Text.rich(
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.left,
               style: TextStyle(
                   fontFamily: 'BebasNeue',
                   color: Theme.of(context).textTheme.bodySmall?.color,
@@ -66,9 +66,12 @@ class _EarthyFruitQuadState extends State<EarthyFruitQuad> {
                   ),
                 )
               ])),
-          const Text(
-            "PROPRIETARY ANALYSIS",
-            textAlign: TextAlign.center,
+          Text(
+            "Proprietary Analysis",
+            textAlign: TextAlign.left,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial'),
           ),
           const SizedBox(
             height: 50,
@@ -83,11 +86,10 @@ class _EarthyFruitQuadState extends State<EarthyFruitQuad> {
               ),
           Text(
             "Let's get specific.",
-            textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(color: const Color(0xffe07e2f)),
+            textAlign: TextAlign.left,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial'),
           )
         ],
       ),
@@ -151,7 +153,7 @@ class EarthyFruitQuadBox extends StatelessWidget {
                               Row(
                                 children: [                                  
                                   QuadBox(
-                                    color: const Color(0xffffe699),
+                                    color: const Color(0xff70370a),
                                     onTap: onTapMoreEarthy,
                                   ),
                                 ],
@@ -162,7 +164,7 @@ class EarthyFruitQuadBox extends StatelessWidget {
                               Row(
                                 children: [
                                   QuadBox(
-                                    color: const Color(0xff70370a),
+                                    color: const Color(0xffffe699),
                                     onTap: onTapMoreEarthyFruit,
                                   ),
                                   const SizedBox(

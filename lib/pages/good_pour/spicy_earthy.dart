@@ -44,7 +44,7 @@ class _SpicyEarthyQuadState extends State<SpicyEarthyQuad> {
             height: 70,
           ),
           Text.rich(
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.left,
               style: TextStyle(
                   fontFamily: 'BebasNeue',
                   color: Theme.of(context).textTheme.bodySmall?.color,
@@ -65,9 +65,12 @@ class _SpicyEarthyQuadState extends State<SpicyEarthyQuad> {
                   ),
                 )
               ])),
-          const Text(
-            "PROPRIETARY ANALYSIS",
-            textAlign: TextAlign.center,
+          Text(
+            "Proprietary Analysis",
+            textAlign: TextAlign.left,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial'),
           ),
           const SizedBox(
             height: 50,
@@ -82,11 +85,10 @@ class _SpicyEarthyQuadState extends State<SpicyEarthyQuad> {
               ),
           Text(
             "Let's get specific.",
-            textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(color: const Color(0xffe07e2f)),
+            textAlign: TextAlign.left,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial'),
           )
         ],
       ),
@@ -121,14 +123,14 @@ class SpicyEarthyQuadBox extends StatelessWidget {
                 left: -30,
                 child: Transform.rotate(
                   angle: -math.pi / 2,
-                  child: Text("Earty",
+                  child: Text("earty",
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.bold, color: mainQuadColor)),
                 )),
             Positioned(
                 top: -24,
                 right: QuadBox.width / 2 - 10,
-                child: Text("Spicy",
+                child: Text("spicy",
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.bold, color: mainQuadColor))),
             Row(

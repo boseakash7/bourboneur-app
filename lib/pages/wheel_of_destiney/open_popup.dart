@@ -106,12 +106,12 @@ class Item extends StatelessWidget {
                 },
                 child: const Icon(
                   Icons.folder,
-                  size: 20,
+                  size: 25,
                   color: Color(0xffe07e2f),
                 ),
               ),
               const SizedBox(
-                width: 10,
+                width: 25,
               ),
               GestureDetector(
                 onTap: () {
@@ -120,7 +120,7 @@ class Item extends StatelessWidget {
                 },
                 child: const Icon(
                   Icons.delete,
-                  size: 20,
+                  size: 25,
                   color: Color(0xffe07e2f),
                 ),
               )
