@@ -29,6 +29,7 @@ class GoodPourTable extends StatefulWidget {
 
 class _GoodPourTableState extends State<GoodPourTable> {
   Controller controller = Get.find<Controller>();
+  bool isLoading = true;
   @override
   void initState() {
     getData();
@@ -42,7 +43,7 @@ class _GoodPourTableState extends State<GoodPourTable> {
       return;
     }
     setState(() {
-      
+      isLoading = false;
     });
   }
 
@@ -148,7 +149,8 @@ class _GoodPourTableState extends State<GoodPourTable> {
             height: 20,
           ),        
           MainTable(
-            items: controller.goodpour.value
+            items: controller.goodpour.value,
+            isLoading: isLoading
           ),
           const SizedBox(
             height: 150,
@@ -160,42 +162,82 @@ class _GoodPourTableState extends State<GoodPourTable> {
 }
 
 class MainTable extends StatelessWidget {
-  MainTable({super.key, this.items = const []});
+  MainTable({super.key, this.items = const [], required this.isLoading});
 
   List<GoodPour> items;
+  bool isLoading;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
+        Row(          
           children: [
-            SizedBox(
+            Container(
               width: 80,
-              child: Text("Proof", style: Theme.of(context).textTheme.titleMedium?.copyWith( fontSize: 15, color: const Color(0xFFeabf00) )),
-            ),            
-            Text("Bottle", style: Theme.of(context).textTheme.titleMedium?.copyWith( fontSize: 15, color: const Color(0xFFeabf00) ))
+              padding: const EdgeInsets.only(left: 12, top: 12, bottom: 12),
+              decoration: BoxDecoration(
+                color: Theme.of(context).textTheme.titleMedium!.color
+              ),
+              child: Text("PROOF", style: Theme.of(context).textTheme.bodyMedium?.copyWith(   fontFamily: 'BebasNeue', fontSize: 14, color: Theme.of(context).colorScheme.background )),
+            ),             
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.only(right: 12, top: 12, bottom: 12),
+              decoration: BoxDecoration(
+                color: Theme.of(context).textTheme.titleMedium!.color
+              ),
+              child: Text("BOTTLE", style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontFamily: 'BebasNeue', fontSize: 14, color: Theme.of(context).colorScheme.background )),
+            )),       
           ],
         ),
-        
+        const SizedBox(
+          height: 10,
+        )
       ]..addAll(_prepareTable(context)),
     );
   }
 
-  List<Row> _prepareTable(BuildContext context) {
-    List <Row> list = [];
+  List<Widget> _prepareTable(BuildContext context) {
+    List <Widget> list = [];
+
+    if ( isLoading )
+    {
+ list.add(Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(left: 12),
+              width: 80,
+              child: Text("Loading...", style: Theme.of(context).textTheme.bodyMedium?.copyWith( fontSize: 12, color: Colors.white )),
+            ),            
+            // Flexible( child: Text(item.bottleName!, style: Theme.of(context).textTheme.bodyMedium?.copyWith( fontSize: 12, color: Colors.white )) ),            
+          ],
+        ));
+        list.add(Container(
+              margin: EdgeInsets.only(top: 10, bottom: 10),
+              height: 1,
+              color: const Color.fromARGB(255, 73, 73, 73),
+            ));
+            return list;
+    }
 
     for ( GoodPour item in items )
     {
       list.add(Row(
           children: [
-            SizedBox(
+            Container(
+              padding: const EdgeInsets.only(left: 12),
               width: 80,
-              child: Text(item.proof!, style: Theme.of(context).textTheme.titleMedium?.copyWith( fontSize: 14, color: const Color(0xFFeabf00) )),
+              child: Text(item.proof!, style: Theme.of(context).textTheme.bodyMedium?.copyWith( fontSize: 12, color: Colors.white )),
             ),            
-            Text(item.bottleName!, style: Theme.of(context).textTheme.titleMedium?.copyWith( fontSize: 14, color: const Color(0xFFeabf00) ))
+            Flexible( child: Text(item.bottleName!, style: Theme.of(context).textTheme.bodyMedium?.copyWith( fontSize: 12, color: Colors.white )) ),            
           ],
         ));
+        list.add(Container(
+              margin: EdgeInsets.only(top: 10, bottom: 10),
+              height: 1,
+              color: const Color.fromARGB(255, 73, 73, 73),
+            ));
     }
 
     return list;
