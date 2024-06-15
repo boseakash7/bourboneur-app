@@ -23,8 +23,11 @@ class _ExplorePageState extends State<ExplorePage> {
           child: Column(
             children: [
               Container(
-                height: 220,
-                padding: const EdgeInsets.only(left: 150, top: 50),
+                // height: 220,
+                padding: const EdgeInsets.only(left: 130, top: 50),
+                constraints: BoxConstraints(
+                  minHeight: 220
+                ),
                 decoration: const BoxDecoration(
                     // color: Colors.red,
                     image: DecorationImage(
@@ -41,7 +44,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       style: TextStyle(
                           fontFamily: 'Arial',
                           color: Theme.of(context).textTheme.titleMedium?.color,
-                          fontSize: 35,
+                          fontSize: 32,
                           height: 1.2),
                     ),
                     Text(

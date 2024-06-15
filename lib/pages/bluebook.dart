@@ -106,7 +106,9 @@ class _BlueBookState extends State<BlueBook> {
                       color: Theme.of(context).textTheme.titleMedium!.color,
                       fontSize: 12,
                       height: 1.3)),              
-              
+              const SizedBox(
+                height: 8,
+              ),
               Text(controller.lastUpdate.value.bluebook_readable != null ? "Updated ${controller.lastUpdate.value.bluebook_readable}" : "Loading...",
                   textAlign: TextAlign.left,
                   style: TextStyle(

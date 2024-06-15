@@ -46,9 +46,12 @@ class _MainQuadState extends State<MainQuad> {
                 style: TextStyle(
                   fontFamily: 'Arial',
                   color: Theme.of(context).textTheme.bodySmall?.color,                  
-                  fontSize: 35,
+                  fontSize: 32,
                   height: 1
                 ),
+              ),
+              const SizedBox(
+                height: 5,
               ),
               Text(                
                 "let us suggest a bourbon",

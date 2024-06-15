@@ -11,6 +11,7 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 import 'package:get/get.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BlogSinglePage extends StatefulWidget {
   BlogSinglePage({super.key, required this.id});
@@ -120,7 +121,14 @@ int _calculateReadTime() {
                       height: 30,
                     ),
                     HtmlWidget(
-                      blogController.blog.value.body!,
+                      blogController.blog.value.body!,                      
+                      onTapUrl: (url) {
+                         launchUrl(
+                          Uri.parse(url),
+                          // mode: LaunchMode.externalApplication
+                        );
+                        return true;
+                      },
                       textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Colors.white,
                       ),
@@ -130,6 +138,12 @@ int _calculateReadTime() {
                     ),
                     BlogProduct(
                       text: "Bourboneur Glencairn Glass ",
+                      onTap: () {
+                        launchUrl(
+                          Uri.parse("https://www.bourboneur.com/product/bourboneur-glencairn-glasses"),
+                          mode: LaunchMode.externalApplication
+                        );
+                      },
                     ),
                     const SizedBox(
                       height: 30,
