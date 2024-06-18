@@ -11,7 +11,7 @@ class PersonalUse extends StatelessWidget {
           right: 20,
           top: 20,
           child: GestureDetector(
-            onTap: () {Navigator.of(context).pop(); },
+            onTap: () { Navigator.of(context).pop(); },
             child: const Icon(
               Icons.close,
               size: 40,

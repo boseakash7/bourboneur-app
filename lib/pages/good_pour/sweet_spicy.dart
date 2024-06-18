@@ -1,4 +1,3 @@
-
 import 'package:bourboneur/pages/good_pour/good_pour_back.dart';
 import 'package:bourboneur/pages/good_pour/quad_box.dart';
 import 'package:flutter/material.dart';
@@ -7,16 +6,14 @@ import 'dart:math' as math;
 
 import 'package:google_fonts/google_fonts.dart';
 
-
 class SweetSpicyQuad extends StatefulWidget {
   SweetSpicyQuad(
       {super.key,
       this.onTapSweetSpicy,
-      this.onTapMoreSweet,    
+      this.onTapMoreSweet,
       this.onTapMoreSpicy,
       this.onTapBack,
-      this.onTapRefresh
-      });
+      this.onTapRefresh});
 
   void Function()? onTapSweetSpicy;
   void Function()? onTapMoreSweet;
@@ -33,7 +30,6 @@ class _SweetSpicyQuadState extends State<SweetSpicyQuad> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(10),
-      
       padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,7 +39,7 @@ class _SweetSpicyQuadState extends State<SweetSpicyQuad> {
             onTapRefresh: widget.onTapRefresh,
           ),
           const SizedBox(
-            height: 70,
+            height: 20,
           ),
           Text.rich(
               textAlign: TextAlign.left,
@@ -70,29 +66,30 @@ class _SweetSpicyQuadState extends State<SweetSpicyQuad> {
           Text(
             "Proprietary Analysis",
             textAlign: TextAlign.left,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
-                            fontSize: 17,
-                            fontFamily: 'Arial'),
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(fontSize: 17, fontFamily: 'Arial'),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Text(
+            "Let's get specific.",
+            textAlign: TextAlign.left,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(fontSize: 17, fontFamily: 'Arial'),
           ),
           const SizedBox(
             height: 50,
           ),
-          
           SweetSpicyQuadBox(
             onTapMoreSpicy: widget.onTapMoreSpicy,
             onTapMoreSweet: widget.onTapMoreSweet,
             onTapSweetSpicy: widget.onTapSweetSpicy,
           ),
-          const SizedBox(
-                height: 50,
-              ),
-          Text(
-            "Let's get specific.",
-            textAlign: TextAlign.left,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
-                            fontSize: 17,
-                            fontFamily: 'Arial'),
-          )
         ],
       ),
     );

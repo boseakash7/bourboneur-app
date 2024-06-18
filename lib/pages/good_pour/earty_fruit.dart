@@ -15,8 +15,7 @@ class EarthyFruitQuad extends StatefulWidget {
       this.onTapMoreFruit,
       this.onTapMoreEarthyFruit,
       this.onTapBack,
-      this.onTapRefresh
-      });
+      this.onTapRefresh});
 
   void Function()? onTapMoreEarthy;
   void Function()? onTapMoreFruit;
@@ -32,17 +31,17 @@ class _EarthyFruitQuadState extends State<EarthyFruitQuad> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(10),      
+      margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-           GoodPourBack(
+          GoodPourBack(
             onTapBack: widget.onTapBack,
             onTapRefresh: widget.onTapRefresh,
           ),
           const SizedBox(
-            height: 70,
+            height: 20,
           ),
           Text.rich(
               textAlign: TextAlign.left,
@@ -69,9 +68,21 @@ class _EarthyFruitQuadState extends State<EarthyFruitQuad> {
           Text(
             "Proprietary Analysis",
             textAlign: TextAlign.left,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
-                            fontSize: 17,
-                            fontFamily: 'Arial'),
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(fontSize: 17, fontFamily: 'Arial'),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Text(
+            "Let's get specific.",
+            textAlign: TextAlign.left,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(fontSize: 17, fontFamily: 'Arial'),
           ),
           const SizedBox(
             height: 50,
@@ -81,16 +92,6 @@ class _EarthyFruitQuadState extends State<EarthyFruitQuad> {
             onTapMoreFruit: widget.onTapMoreFruit,
             onTapMoreEarthyFruit: widget.onTapMoreEarthyFruit,
           ),
-          const SizedBox(
-                height: 50,
-              ),
-          Text(
-            "Let's get specific.",
-            textAlign: TextAlign.left,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
-                            fontSize: 17,
-                            fontFamily: 'Arial'),
-          )
         ],
       ),
     );
@@ -151,7 +152,7 @@ class EarthyFruitQuadBox extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                children: [                                  
+                                children: [
                                   QuadBox(
                                     color: const Color(0xff70370a),
                                     onTap: onTapMoreEarthy,

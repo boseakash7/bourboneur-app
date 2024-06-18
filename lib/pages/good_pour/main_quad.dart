@@ -39,7 +39,7 @@ class _MainQuadState extends State<MainQuad> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(
-                height: 70,
+                height: 20,
               ),
               Text("Find a good pour,",
               textAlign: TextAlign.left,
@@ -61,6 +61,16 @@ class _MainQuadState extends State<MainQuad> {
                             fontFamily: 'Arial'),
               ),              
               const SizedBox(
+                height: 30,
+              ),
+               Text(
+                "tap a quadrant below\nto find custom\nsuggestions that fit\nyour taste!",
+                textAlign: TextAlign.left,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
+                            fontSize: 17,
+                            fontFamily: 'Arial'),
+              ),
+               const SizedBox(
                 height: 50,
               ),
               MainQuadBox(
@@ -69,18 +79,7 @@ class _MainQuadState extends State<MainQuad> {
                 onTapSpicyEarthy: widget.onTapSpicyEarthy,
                 onTapSweetFruity: widget.onTapSweetFruity,
                 onTapSweetSpicy: widget.onTapSweetSpicy,
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              Text(
-                "tap a quadrant below to find custom suggestions that fit your taste!",
-                textAlign: TextAlign.left,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
-                            fontSize: 17,
-                            fontFamily: 'Arial'),
-              ),
-              
+              ),             
             ],
           ),
         );

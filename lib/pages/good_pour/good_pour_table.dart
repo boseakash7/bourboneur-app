@@ -104,7 +104,7 @@ class _GoodPourTableState extends State<GoodPourTable> {
             onTapRefresh: widget.onTapRefresh,
           ),
           const SizedBox(
-            height: 70,
+            height: 20,
           ),
           Text.rich(
               textAlign: TextAlign.left,
