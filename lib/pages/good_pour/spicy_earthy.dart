@@ -41,7 +41,7 @@ class _SpicyEarthyQuadState extends State<SpicyEarthyQuad> {
             onTapRefresh: widget.onTapRefresh,
           ),
           const SizedBox(
-            height: 70,
+            height: 30,
           ),
           Text.rich(
               textAlign: TextAlign.left,
@@ -73,23 +73,25 @@ class _SpicyEarthyQuadState extends State<SpicyEarthyQuad> {
                             fontFamily: 'Arial'),
           ),
           const SizedBox(
-            height: 50,
+            height: 20,
           ),
-          SpicyEarthyQuadBox(
-            onTapMoreEarthy: widget.onTapMoreEarthy,
-            onTapMoreSpicy: widget.onTapMoreSpicy,
-            onTapSpicyEarthy: widget.onTapSpicyEarthy,
-          ),
-          const SizedBox(
-                height: 50,
-              ),
-          Text(
+           Text(
             "Let's get specific.",
             textAlign: TextAlign.left,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(                            
                             fontSize: 17,
                             fontFamily: 'Arial'),
-          )
+          ),
+          const SizedBox(
+                height: 50,
+              ),
+         
+          SpicyEarthyQuadBox(
+            onTapMoreEarthy: widget.onTapMoreEarthy,
+            onTapMoreSpicy: widget.onTapMoreSpicy,
+            onTapSpicyEarthy: widget.onTapSpicyEarthy,
+          ),
+          
         ],
       ),
     );
