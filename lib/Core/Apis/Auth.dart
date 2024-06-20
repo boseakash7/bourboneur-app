@@ -11,6 +11,7 @@ class _Auth extends BaseApi {
   static String AUTH_LOGIN = 'auth/login';    
   static String AUTH_FORGET_PASSWORD = 'auth/forget-password';    
   static String AUTH_RESET_PASSWORD = 'auth/reset-password';    
+  static String AUTH_DELETE = 'auth/delete';    
 
   Future<dynamic> register(
     String name,
@@ -60,7 +61,7 @@ class _Auth extends BaseApi {
     return true;
   }
 
-   Future<dynamic> forgetPassword(    
+  Future<dynamic> forgetPassword(    
     String email
    ) async {
     
@@ -89,6 +90,23 @@ class _Auth extends BaseApi {
       "otp": otp
     };
     var response = await sendPost(AUTH_RESET_PASSWORD, data);
+    if (response == null ) return false;
+    if ( response.body['code'] != 'OK' ) {
+      utils.showToast("Error", response.body['data']);
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<dynamic> deleteAccount(    
+    String id
+   ) async {
+    
+    var data = {      
+      "id": id
+    };
+    var response = await sendPost(AUTH_DELETE, data);
     if (response == null ) return false;
     if ( response.body['code'] != 'OK' ) {
       utils.showToast("Error", response.body['data']);

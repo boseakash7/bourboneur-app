@@ -1,5 +1,6 @@
 import 'package:bourboneur/Core/Apis/Auth.dart';
 import 'package:bourboneur/Core/Controller.dart';
+import 'package:bourboneur/pages/delete_account.dart';
 import 'package:bourboneur/pages/blog.dart';
 import 'package:bourboneur/pages/bluebook.dart';
 import 'package:bourboneur/pages/dashboard.dart';
@@ -67,7 +68,12 @@ class _MenuState extends State<Menu> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+              Get.to(() => const DeleteAccount());
+            },
+            child: Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,9 +94,17 @@ class _MenuState extends State<Menu> {
                     fontSize: 14,
                     color: Colors.white
                   ),
-                )
+                ),
+                Text("Delete Account",
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 14,
+                    color: Color(0xfff47c1a)
+                  ))
               ],
             ),
+          ),
           ),
           MenuItem(text: 'Home', onTap: () {
             Get.offAll(() => DashboardPage());

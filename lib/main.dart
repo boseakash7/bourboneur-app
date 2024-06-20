@@ -24,31 +24,31 @@ class MyApp extends StatelessWidget {
       title: 'Bourboneur',
       theme: ThemeData(
       
-        textTheme: TextTheme(
-          headlineSmall: const TextStyle(color: Color(0xFFd5bb9b)),
-          headlineMedium: const TextStyle(
+        textTheme: const TextTheme(
+          headlineSmall: TextStyle(color: Color(0xFFd5bb9b)),
+          headlineMedium: TextStyle(
             fontFamily: 'Arial',
             color: Color(0xFFd5bb9b),            
             fontSize: 28, 
             fontWeight: FontWeight.bold,
           ),
-          headlineLarge: const TextStyle(color: Colors.white),
-          displayLarge: const TextStyle(color: Colors.white),
-          displayMedium: const TextStyle(color: Colors.white),
-          displaySmall: const TextStyle(color: Colors.white),
-          bodyLarge: const TextStyle(color: Colors.white),
-          bodyMedium: const TextStyle(color: Color(0xFFd5bb9b)),
-          bodySmall:  const TextStyle(
+          headlineLarge: TextStyle(color: Colors.white),
+          displayLarge: TextStyle(color: Colors.white),
+          displayMedium: TextStyle(color: Colors.white),
+          displaySmall: TextStyle(color: Colors.white),
+          bodyLarge: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Color(0xFFd5bb9b)),
+          bodySmall:  TextStyle(
             fontFamily: 'Arial',
             color: Color(0xFFd5bb9b),
             fontSize: 14,
           ),
-          labelMedium:  const TextStyle(
+          labelMedium:  TextStyle(
             fontFamily: 'Arial',
             color: Colors.white,
             fontSize: 14,
           ),          
-          titleMedium:  const TextStyle(
+          titleMedium:  TextStyle(
             fontFamily: 'Arial',
             fontWeight: FontWeight.bold,                 
             color: Color(0xFFd5bb9b),
@@ -56,19 +56,19 @@ class MyApp extends StatelessWidget {
           )
         ),
         appBarTheme: AppBarTheme(
-          backgroundColor: const Color(0xFF000000).withOpacity(1),
-          foregroundColor: const Color(0xFF000000).withOpacity(1),
-          surfaceTintColor: const Color(0xFF000000).withOpacity(1),          
-          iconTheme: const IconThemeData(
+          backgroundColor: Color(0xFF000000).withOpacity(1),
+          foregroundColor: Color(0xFF000000).withOpacity(1),
+          surfaceTintColor: Color(0xFF000000).withOpacity(1),          
+          iconTheme: IconThemeData(
             color: Color(0xffe17f2f)
           )
         ),
         colorScheme: ColorScheme.fromSwatch(          
-          backgroundColor: const Color(0xFF000000).withOpacity(1),          
+          backgroundColor: Color(0xFF000000).withOpacity(1),          
         ),
         useMaterial3: true,        
       ),
-      home: const SplashPage(),
+      home: SplashPage(),
     );
   }
 }
