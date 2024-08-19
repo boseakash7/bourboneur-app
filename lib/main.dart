@@ -1,14 +1,23 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:bourboneur/Core/BlogController.dart';
 import 'package:bourboneur/Core/Controller.dart';
 import 'package:bourboneur/pages/capture_payment_details.dart';
 import 'package:bourboneur/pages/sign_in.dart';
 import 'package:bourboneur/pages/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
-void main() {
+void main() async {
+  await WidgetsFlutterBinding.ensureInitialized();
+  ByteData data = await rootBundle.load('assets/certificate/cert.pem');
+  SecurityContext context = SecurityContext.defaultContext;
+  context.setTrustedCertificatesBytes(data.buffer.asUint8List());
+
   Get.put(Controller(), permanent: true);
   Get.put(BlogController(), permanent: true);
   runApp(const MyApp());
