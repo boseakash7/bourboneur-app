@@ -13,6 +13,8 @@ class BaseApi extends GetConnect {
   // late SharedPreferences prefs;
   @override
   void onInit() {
+    // allowAutoSignedCert = true;
+    super.onInit();
     initStorage();
     httpClient.baseUrl = Constants.API_BASE_URL;
     httpClient.timeout = const Duration(seconds: 60);

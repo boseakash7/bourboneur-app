@@ -51,14 +51,32 @@ class _ExploreItemState extends State<ExploreItem> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if ( widget.onTapOpen != null )
         GestureDetector(
           onTap: () {    
-            if ( widget.onTapOpen != null && showChild == false ) widget.onTapOpen!();            
+            if ( showChild == false ) widget.onTapOpen!();            
             setState(() {              
               showChild = !showChild;
             });            
           },
-          child: Container(
+          child: getContainer(),
+        ),
+        if ( widget.onTapOpen == null )
+        getContainer(),
+        if (showChild && widget.children != null )
+          Container(
+            padding: widget.childPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: widget.children!,
+            ),
+          )
+      ],
+    );
+  }
+
+  Widget getContainer() {
+    return Container(
             padding:
                 const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
             margin: const EdgeInsets.only(bottom: 5),
@@ -75,18 +93,7 @@ class _ExploreItemState extends State<ExploreItem> {
                   fontWeight: FontWeight.bold,
                   height: 1),
             ),
-          ),
-        ),
-        if (showChild && widget.children != null )
-          Container(
-            padding: widget.childPadding,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: widget.children!,
-            ),
-          )
-      ],
-    );
+          );
   }
 }
 
