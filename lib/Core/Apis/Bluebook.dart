@@ -11,14 +11,16 @@ class _Bluebook extends BaseApi {
   static String BLUEBOOK_GET_ALL = 'bluebook/get-all-bluebooks';
   static String BLUEBOOK_LAST_UPDATED_AT = 'bluebook/get-last-update';
 
-   Future<dynamic> all(
+  Future<dynamic> all(
     String page,
+    String? keyword,
     String limit
-   ) async {
+  ) async {
     
     var data = {
       "page": page,
-      "limit": limit
+      "limit": limit,
+      "keyword": keyword
     };
     var response = await sendGet(BLUEBOOK_GET_ALL, query: data);
     if (response == null ) return false;
@@ -29,10 +31,12 @@ class _Bluebook extends BaseApi {
 
     List<BlueBook> cList = _parseBlueBook(response.body['data']['data']);
 
-    controller.bluebooks.clear();
+    if ( page.toString() == "1" ) {
+      controller.bluebooks.clear();      
+    }
     controller.bluebooks.addAll(cList);
 
-    return true;
+    return cList.isNotEmpty;
   }
 
   Future<dynamic> lastUpdatedAt() async {

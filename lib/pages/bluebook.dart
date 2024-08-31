@@ -23,19 +23,22 @@ class _BlueBookState extends State<BlueBook> {
   TextEditingController searchController = TextEditingController();
 
   Controller controller = Get.find<Controller>();
+  bool isListLoading = false;
+  bool hasListData = true;
+  int pageToLoad = 1;
 
   @override
   void initState() {
-    getData();
+    getTimeData();
+    getListData(pageToLoad);
     super.initState();
   }
 
   _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      setState(() {
-        keyword = query;
-      });
+      keyword = query;
+      getListData("1");
     });
   }
 
@@ -45,9 +48,36 @@ class _BlueBookState extends State<BlueBook> {
     });
   }
 
-  void getData() async {
+  void getTimeData() async {
     await BlueBookApi.lastUpdatedAt();
     setState(() {});
+  }
+
+  void getListData( page ) async {
+    if ( isListLoading ) return;
+     
+    setState(() {
+      isListLoading = true;
+    });
+    bool response = await BlueBookApi.all(page.toString(), keyword, "10");
+    if (!response) {
+      setState(() {
+        isListLoading = false;
+        hasListData = false;
+      });
+      return;
+    }
+
+    pageToLoad++;
+
+    setState(() {
+      isListLoading = false;
+    });
+  }
+
+  void _handleScrollReachedBottom() {
+    if ( !hasListData ) return;
+    getListData(pageToLoad);
   }
 
   @override
@@ -152,10 +182,11 @@ class _BlueBookState extends State<BlueBook> {
               ),
               Container(
                 constraints: const BoxConstraints(maxHeight: 360),
-                child: SingleChildScrollView(
-                    child: BlueBookTable(
+                child: BlueBookTable(
+                  onReachedBottom: _handleScrollReachedBottom,
+                  showLoading: hasListData,
                   keyword: keyword,
-                )),
+                ),
               ),
               const SizedBox(
                 height: 5,
