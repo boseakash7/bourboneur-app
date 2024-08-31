@@ -6,38 +6,43 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BlueBookTable extends StatefulWidget {
-  BlueBookTable({super.key, this.keyword});
+  BlueBookTable({
+    super.key,
+    this.keyword,
+    required this.showLoading,
+    required this.onReachedBottom
+  });
 
   String? keyword;
+  bool showLoading;
+  VoidCallback? onReachedBottom;
 
   @override
   State<BlueBookTable> createState() => _BlueBookTableState();
 }
 
 class _BlueBookTableState extends State<BlueBookTable> {
-  Controller controller = Get.find<Controller>();
-  bool isLoading = true;
+  Controller controller = Get.find<Controller>();  
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
-    getData();
-    super.initState();
-  }
-
-  getData() async {
-    bool response = await BlueBookApi.all("1", "12000");
-    if (!response) {
-      return;
-    }
-
-    setState(() {
-      isLoading = false;
+    _scrollController.addListener(() {
+        double maxScroll = _scrollController.position.maxScrollExtent;
+        double currentScroll = _scrollController.position.pixels;
+        double delta = 100.0; // or something else..
+        if ( maxScroll - currentScroll <= delta) { // whatever you determine here
+          if ( widget.onReachedBottom != null ) widget.onReachedBottom!();
+        }
     });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Table(
+    return SingleChildScrollView(
+      controller: _scrollController,
+      child: Table(
       border: TableBorder.symmetric(
           inside: BorderSide.none, outside: BorderSide.none),
       columnWidths: const {
@@ -101,61 +106,13 @@ class _BlueBookTableState extends State<BlueBookTable> {
           ],
         ),
       ]..addAll(_prepareTableRows(controller.bluebooks)),
+    ),
     );
   }
 
   List<TableRow> _prepareTableRows(RxList<BlueBook> result) {
     List<TableRow> list = [];
-    if ( isLoading ) {
-      list.add(TableRow(
-          decoration: const BoxDecoration(
-              border: BorderDirectional(
-                  bottom: BorderSide(
-                      color: Color.fromARGB(255, 73, 73, 73), width: 1))),
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 12, top: 12, bottom: 12, right: 12),
-              child: Text(
-                "Loading...",
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.white,
-                    // fontWeight: FontWeight.bold,
-                    fontSize: 12),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 12, bottom: 12),
-              child: Text(
-                "",
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.white,
-                    // fontWeight: FontWeight.bold,
-                    fontSize: 12),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 12, bottom: 12),
-              child: Text(
-                '',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.white,
-                    // fontWeight: FontWeight.bold,
-                    fontSize: 12),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 12, bottom: 12, right: 12),
-              child: Text(
-                "",
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.white,
-                    // fontWeight: FontWeight.bold,
-                    fontSize: 12),
-              ),
-            )
-          ]));
-          return list;
-    }
+    
     
     for (BlueBook bluebook in result.value) {
 
@@ -215,6 +172,57 @@ class _BlueBookTableState extends State<BlueBookTable> {
               ),
             )
           ]));
+    }
+
+    if ( widget.showLoading ) {
+      list.add(TableRow(
+          decoration: const BoxDecoration(
+              border: BorderDirectional(
+                  bottom: BorderSide(
+                      color: Color.fromARGB(255, 73, 73, 73), width: 1))),
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 12, top: 12, bottom: 12, right: 12),
+              child: Text(
+                "Loading...",
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.white,
+                    // fontWeight: FontWeight.bold,
+                    fontSize: 12),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 12, bottom: 12),
+              child: Text(
+                "",
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.white,
+                    // fontWeight: FontWeight.bold,
+                    fontSize: 12),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 12, bottom: 12),
+              child: Text(
+                '',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.white,
+                    // fontWeight: FontWeight.bold,
+                    fontSize: 12),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 12, bottom: 12, right: 12),
+              child: Text(
+                "",
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.white,
+                    // fontWeight: FontWeight.bold,
+                    fontSize: 12),
+              ),
+            )
+          ]));
+          return list;
     }
 
     return list;
