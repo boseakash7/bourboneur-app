@@ -39,7 +39,8 @@ class _BlueBookState extends State<BlueBook> {
     _debounce = Timer(const Duration(milliseconds: 500), () {
       keyword = query;
       hasListData = true;
-      getListData("1");
+      pageToLoad = 1;
+      getListData(pageToLoad);
     });
   }
 
