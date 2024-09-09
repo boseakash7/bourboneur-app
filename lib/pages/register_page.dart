@@ -87,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
       isLoading = false;
     });
     if (register) {      
-      Get.to(() => openDashboard(controller.user.value));
+      Get.off(() => openDashboard(controller.user.value));
     }
   }
 
