@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bourboneur/Core/Apis/User.dart';
 import 'package:bourboneur/Core/Controller.dart';
 import 'package:bourboneur/Core/Utils.dart';
@@ -30,7 +32,12 @@ class _CapturePaymentDetailsState extends State<CapturePaymentDetails> {
     String url = widget.trialAvailable ? controller.config.value.saveCardUrl! : controller.config.value.subscribeNowUrl!;
     url = "${url}?user_id=${controller.user.value.id}&package_id=${widget.packageId}";
 
+    String userAgent = Platform.isIOS ?
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 17_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1' :
+    'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.127 Mobile Safari/537.36';
+
     webViewController = WebViewController()
+      ..setUserAgent(userAgent)
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.white)
       ..addJavaScriptChannel('Application', onMessageReceived: (JavaScriptMessage msg) async {
