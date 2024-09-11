@@ -1,4 +1,6 @@
-import 'dart:ffi';
+import 'dart:async';
+import 'dart:developer';
+import 'dart:io';
 
 import 'package:bourboneur/Core/Apis/Auth.dart';
 import 'package:bourboneur/Core/Apis/Package.dart';
@@ -10,8 +12,9 @@ import 'package:bourboneur/pages/capture_payment_details.dart';
 import 'package:bourboneur/pages/sign_in.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SelectPackagePage extends StatefulWidget {
@@ -72,15 +75,15 @@ class _SelectPackagePageState extends State<SelectPackagePage> {
                       height: 10,
                     ),
                     Text(
-                      controller.user.value.packageId == null ?
-                      "Start your 7-day free trial.  Cancel anytime." :
-                      "Start your subscription now. Cancel anytime.",
+                        controller.user.value.packageId == null
+                            ? "Start your 7-day free trial.  Cancel anytime."
+                            : "Start your subscription now. Cancel anytime.",
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             fontSize: 16, color: const Color(0xffbfbfbf))),
                     const SizedBox(
                       height: 10,
                     ),
-                    PackageForm()
+                    const PackageForm()
                     // if ( controller.user.value.packageId == null )
                     // Text(
                     //     "You will not be charged, until trial is over. After that your normal package price is active",
@@ -119,17 +122,105 @@ class _PackageFormState extends State<PackageForm> {
   Utils utils = Utils();
 
   String? selectedPackageId;
-
+  final InAppPurchase _inAppPurchase = InAppPurchase.instance;
+  final List<PurchaseDetails> _purchases = [];
+  List<ProductDetails> _products = [];
+  StreamSubscription<List<PurchaseDetails>>? _subscription;
   void _handleSubmit() {
-    if ( selectedPackageId == null ) {
+    if (selectedPackageId == null) {
       utils.showToast("Error", "Select a package first.");
       return;
     }
+    if (Platform.isIOS) {
+      _subscribe(
+          product: selectedPackageId == "2" ? _products[1] : _products[0]);
+    } else {
+      Get.off(() => CapturePaymentDetails(
+            packageId: selectedPackageId!,
+            trialAvailable: controller.user.value.packageId == null,
+          ));
+    }
+  }
 
-    Get.off(() => CapturePaymentDetails(
-      packageId: selectedPackageId!,
-      trialAvailable: controller.user.value.packageId == null,
-    ));
+  @override
+  void initState() {
+    Platform.isIOS ? intilizeIosPayment : null;
+    super.initState();
+  }
+
+  Future<List<ProductDetails>> _getProducts(
+      {required Set<String> productIds}) async {
+    ProductDetailsResponse response =
+        await _inAppPurchase.queryProductDetails(productIds);
+
+    return response.productDetails;
+  }
+
+  intilizeIosPayment() async {
+    List<ProductDetails> products = await _getProducts(
+      productIds: <String>{"monthly_subscription", "yearly_subscription"},
+    );
+    setState(() {
+      _products = products;
+    });
+    final Stream<List<PurchaseDetails>> purchaseUpdated =
+        _inAppPurchase.purchaseStream;
+    _subscription = purchaseUpdated.listen((purchaseDetailsList) {
+      setState(() {
+        _purchases.addAll(purchaseDetailsList);
+        _listenToPurchaseUpdated(purchaseDetailsList);
+      });
+    }, onDone: () {
+      _subscription!.cancel();
+    }, onError: (error) {
+      _subscription!.cancel();
+    });
+  }
+
+  void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
+    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+      switch (purchaseDetails.status) {
+        case PurchaseStatus.pending:
+          await _inAppPurchase.completePurchase(purchaseDetails);
+          break;
+        case PurchaseStatus.purchased:
+          if (purchaseDetails.productID == "monthly_subscription") {
+            log("Purchasd");
+            utils.showToast("Success", "SUCCESSFULLY PURCHASED MONTHLY PLAN");
+          } else {
+            log("Purchasd");
+            utils.showToast("Success", "SUCCESSFULLY PURCHASED YEARLY PLAN");
+          }
+          break;
+        case PurchaseStatus.restored:
+          log("enter");
+
+          EasyLoading.showSuccess("SUCCESSFULLY PURCHASED");
+          break;
+        case PurchaseStatus.error:
+          print('asdasdasdasd:${purchaseDetails.error!.message}');
+          if (purchaseDetails.error!.message ==
+              'BillingResponse.itemAlreadyOwned') {}
+
+          break;
+        default:
+          break;
+      }
+
+      if (purchaseDetails.pendingCompletePurchase) {
+        await _inAppPurchase.completePurchase(purchaseDetails);
+        setState(() {});
+      }
+    });
+  }
+
+  Future<void> _subscribe({required ProductDetails product}) async {
+    late PurchaseParam purchaseParam;
+
+    purchaseParam = PurchaseParam(productDetails: product);
+
+    _inAppPurchase.buyConsumable(
+        purchaseParam: purchaseParam, autoConsume: true);
   }
 
   @override
@@ -166,23 +257,25 @@ class _PackageFormState extends State<PackageForm> {
               borderRadius: BorderRadius.all(Radius.circular(20))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: []..addAll(_preparePackages(controller.packages)),
+            children: [..._preparePackages(controller.packages)],
           ),
         ),
         const SizedBox(
           height: 20,
         ),
         CustomButton(
-          text: controller.user.value.packageId == null ? "Start free 1 week trial" : "Renew subscription",
+          text: controller.user.value.packageId == null
+              ? "Start free 1 week trial"
+              : "Renew subscription",
           onTap: _handleSubmit,
         ),
         const SizedBox(
           height: 15,
         ),
         Text(
-          controller.user.value.packageId == null ?
-          "After the trial period you’ll be charged based upon your preferences selected above." :
-          "After subscription complete you’ll will now be charged based upon your preferences selected above.",
+          controller.user.value.packageId == null
+              ? "After the trial period you’ll be charged based upon your preferences selected above."
+              : "After subscription complete you’ll will now be charged based upon your preferences selected above.",
           textAlign: TextAlign.center,
           style: Theme.of(context)
               .textTheme
@@ -194,7 +287,7 @@ class _PackageFormState extends State<PackageForm> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [            
+          children: [
             GestureDetector(
               onTap: () async {
                 await launchUrl(Uri.parse(controller.config.value.termsUrl!));
@@ -208,9 +301,9 @@ class _PackageFormState extends State<PackageForm> {
                     ?.copyWith(color: const Color(0xffbfbfbf)),
               ),
             ),
-             GestureDetector(
+            GestureDetector(
               onTap: () async {
-                 await launchUrl(Uri.parse(controller.config.value.privacyUrl!));
+                await launchUrl(Uri.parse(controller.config.value.privacyUrl!));
               },
               child: Text(
                 "Privacy Policy",
@@ -223,31 +316,33 @@ class _PackageFormState extends State<PackageForm> {
             )
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 70,
         ),
-         Container(
-                alignment: Alignment.center,
-                child: Text.rich(TextSpan(children: [
-                  TextSpan(
-                    text: "Want to change account? ",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith( color: const Color(0xffbfbfbf)),
-                  ),
-                  TextSpan(
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        Auth.logout();
-                        Get.offAll(() => SignInPage());
-                      },
-                    text: "Logout",
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: const Color(0xFFff8202), fontSize: 12),
-                  ),
-                ])),
-              )
+        Container(
+          alignment: Alignment.center,
+          child: Text.rich(TextSpan(children: [
+            TextSpan(
+              text: "Want to change account? ",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(color: const Color(0xffbfbfbf)),
+            ),
+            TextSpan(
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  Auth.logout();
+                  Get.offAll(() => const SignInPage());
+                },
+              text: "Logout",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(color: const Color(0xFFff8202), fontSize: 12),
+            ),
+          ])),
+        )
       ],
     );
   }
@@ -292,12 +387,12 @@ class PackageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  GestureDetector(
+    return GestureDetector(
       onTap: () {
         if (onTap != null) onTap!(package);
       },
       child: Container(
-        decoration: BoxDecoration(          
+        decoration: BoxDecoration(
             border: Border.all(
                 color: const Color(0xFFff8202)
                     .withOpacity(isSelected == true ? 1 : 0),
