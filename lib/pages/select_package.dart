@@ -144,7 +144,7 @@ class _PackageFormState extends State<PackageForm> {
 
   @override
   void initState() {
-    Platform.isIOS ? intilizeIosPayment : null;
+    Platform.isIOS ? intilizeIosPayment() : null;
     super.initState();
   }
 
@@ -195,10 +195,11 @@ class _PackageFormState extends State<PackageForm> {
         case PurchaseStatus.restored:
           log("enter");
 
-          EasyLoading.showSuccess("SUCCESSFULLY PURCHASED");
+          EasyLoading.showSuccess("SUCCESSFULLY Restore");
           break;
         case PurchaseStatus.error:
           print('asdasdasdasd:${purchaseDetails.error!.message}');
+          utils.showToast("Error", purchaseDetails.error!.message);
           if (purchaseDetails.error!.message ==
               'BillingResponse.itemAlreadyOwned') {}
 
@@ -215,10 +216,9 @@ class _PackageFormState extends State<PackageForm> {
   }
 
   Future<void> _subscribe({required ProductDetails product}) async {
+    Utils().showToast("Test Purchase id", product.id.toString());
     late PurchaseParam purchaseParam;
-
     purchaseParam = PurchaseParam(productDetails: product);
-
     _inAppPurchase.buyConsumable(
         purchaseParam: purchaseParam, autoConsume: true);
   }
@@ -246,7 +246,10 @@ class _PackageFormState extends State<PackageForm> {
                       // fontWeight: FontWeight.normal
                     ),
               )),
-              const Expanded(child: Spacer())
+              const Expanded(
+                child: SizedBox()
+              // Spacer()
+              )
             ],
           ),
         ),
