@@ -8,6 +8,7 @@ import 'package:bourboneur/pages/sign_in.dart';
 import 'package:bourboneur/pages/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      
       title: 'Bourboneur',
       theme: ThemeData(
       
@@ -78,6 +80,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,        
       ),
       home: SplashPage(),
+      builder: EasyLoading.init(),
     );
   }
 }

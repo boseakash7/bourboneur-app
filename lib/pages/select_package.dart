@@ -120,20 +120,28 @@ class PackageForm extends StatefulWidget {
 class _PackageFormState extends State<PackageForm> {
   Controller controller = Get.find<Controller>();
   Utils utils = Utils();
-
+  bool isAvailable = false;
   String? selectedPackageId;
+
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   final List<PurchaseDetails> _purchases = [];
+
   List<ProductDetails> _products = [];
   StreamSubscription<List<PurchaseDetails>>? _subscription;
+
   void _handleSubmit() {
     if (selectedPackageId == null) {
       utils.showToast("Error", "Select a package first.");
       return;
     }
     if (Platform.isIOS) {
-      _subscribe(
-          product: selectedPackageId == "2" ? _products[1] : _products[0]);
+      if (isAvailable) {
+        _subscribe(
+            product: selectedPackageId == "2"?
+             _products[1] : _products[0]);
+      } else {
+        utils.showToast("Sorry", "This product is currently unavailable");
+      }
     } else {
       Get.off(() => CapturePaymentDetails(
             packageId: selectedPackageId!,
@@ -152,75 +160,91 @@ class _PackageFormState extends State<PackageForm> {
       {required Set<String> productIds}) async {
     ProductDetailsResponse response =
         await _inAppPurchase.queryProductDetails(productIds);
-
     return response.productDetails;
   }
 
   intilizeIosPayment() async {
+    isAvailable = await _inAppPurchase.isAvailable();
     List<ProductDetails> products = await _getProducts(
-      productIds: <String>{"monthly_subscription", "yearly_subscription"},
+      productIds: <String>{
+        "bourboneur_monthly_subscription",
+        "bourboneur_yearly_subscription"
+      },
     );
-    setState(() {
-      _products = products;
-    });
+
+    _products = products;
+
     final Stream<List<PurchaseDetails>> purchaseUpdated =
         _inAppPurchase.purchaseStream;
     _subscription = purchaseUpdated.listen((purchaseDetailsList) {
-      setState(() {
-        _purchases.addAll(purchaseDetailsList);
-        _listenToPurchaseUpdated(purchaseDetailsList);
-      });
+      _listenToPurchaseUpdated(purchaseDetailsList);
     }, onDone: () {
+     
       _subscription!.cancel();
     }, onError: (error) {
+      print(error.toString());
       _subscription!.cancel();
     });
   }
 
   void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
-    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
-      switch (purchaseDetails.status) {
-        case PurchaseStatus.pending:
+    try {
+      purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+        switch (purchaseDetails.status) {
+          case PurchaseStatus.pending:
+            // await _inAppPurchase
+            //     .completePurchase(purchaseDetails)Gondal@747
+            //     .onError((error, stackTrace) {
+            //   EasyLoading.showError(error.toString());
+            // });
+            break;
+          case PurchaseStatus.purchased:
+            // if (purchaseDetails.productID ==
+            //     "bourboneur_monthly_subscription") {
+            //   log("Purchasd");
+            //   utils.showToast("Success", "SUCCESSFULLY PURCHASED MONTHLY PLAN");
+            // } else {
+            //   log("Purchasd");
+            //   utils.showToast("Success", "SUCCESSFULLY PURCHASED YEARLY PLAN");
+            // }
+            break;
+          case PurchaseStatus.restored:
+            // log("enter");
+
+            // EasyLoading.showSuccess("SUCCESSFULLY Restore");
+            break;
+          case PurchaseStatus.error:
+            // print('asdasdasdasd:${purchaseDetails.error!.message}');
+            // utils.showToast("Error", purchaseDetails.error!.message);
+            // if (purchaseDetails.error!.message ==
+            //     'BillingResponse.itemAlreadyOwned') {}
+
+            break;
+          default:
+            break;
+        }
+
+        if (purchaseDetails.pendingCompletePurchase) {
           await _inAppPurchase.completePurchase(purchaseDetails);
-          break;
-        case PurchaseStatus.purchased:
-          if (purchaseDetails.productID == "monthly_subscription") {
-            log("Purchasd");
-            utils.showToast("Success", "SUCCESSFULLY PURCHASED MONTHLY PLAN");
-          } else {
-            log("Purchasd");
-            utils.showToast("Success", "SUCCESSFULLY PURCHASED YEARLY PLAN");
-          }
-          break;
-        case PurchaseStatus.restored:
-          log("enter");
-
-          EasyLoading.showSuccess("SUCCESSFULLY Restore");
-          break;
-        case PurchaseStatus.error:
-          print('asdasdasdasd:${purchaseDetails.error!.message}');
-          utils.showToast("Error", purchaseDetails.error!.message);
-          if (purchaseDetails.error!.message ==
-              'BillingResponse.itemAlreadyOwned') {}
-
-          break;
-        default:
-          break;
-      }
-
-      if (purchaseDetails.pendingCompletePurchase) {
-        await _inAppPurchase.completePurchase(purchaseDetails);
-        setState(() {});
-      }
-    });
+          // setState(() {});
+        }
+      });
+    } catch (e) {
+      EasyLoading.showError(e.toString());
+    }
   }
 
   Future<void> _subscribe({required ProductDetails product}) async {
-    Utils().showToast("Test Purchase id", product.id.toString());
+    //  Utils utils = Utils();
+    utils.showToast("Test Purchase id", product.id.toString());
     late PurchaseParam purchaseParam;
-    purchaseParam = PurchaseParam(productDetails: product);
-    _inAppPurchase.buyConsumable(
-        purchaseParam: purchaseParam, autoConsume: true);
+    try {
+      purchaseParam = PurchaseParam(productDetails: product);
+      // _inAppPurchase
+      _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
+    } catch (e) {
+      EasyLoading.showError(e.toString());
+    }
   }
 
   @override
@@ -246,10 +270,9 @@ class _PackageFormState extends State<PackageForm> {
                       // fontWeight: FontWeight.normal
                     ),
               )),
-              const Expanded(
-                child: SizedBox()
-              // Spacer()
-              )
+              const Expanded(child: SizedBox()
+                  // Spacer()
+                  )
             ],
           ),
         ),
