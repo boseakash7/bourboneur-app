@@ -5,14 +5,12 @@ import 'package:bourboneur/Core/Controllers/Package.dart';
 import 'package:get/get.dart';
 
 class _Package extends BaseApi {
-
   static String GET_ALL = 'package/get-all';
-
-   Future<dynamic> all() async {
-  
+  static String Subscribe = 'package/subscribe';
+  Future<dynamic> all() async {
     var response = await sendGet(GET_ALL);
-    if (response == null ) return false;
-    if ( response.body['code'] != 'OK' ) {
+    if (response == null) return false;
+    if (response.body['code'] != 'OK') {
       utils.showToast("Error", response.body['data']);
       return false;
     }
@@ -24,17 +22,37 @@ class _Package extends BaseApi {
 
     return true;
   }
+ Future<dynamic> subscribe(
+    String userId,
+    String packageId,
+    String uniqueId
+  ) async {
+    
+    var data = {
+      "user_id": userId,
+      "unique_id": uniqueId,
+      "package_id": packageId
+    };
+    var response = await sendPost(Subscribe,  data);
+    if (response == null ) return false;
+    if ( response.body['code'] != 'OK' ) {
+      utils.showToast("Error", response.body['data']);
+      return false;
+    }
+utils.showToast("Success", "You have successfully subcribed to our premium plan");
+    
 
-   List<Package> _parseBlueBook(List responseBody) {
+    return true;
+  }
+
+  List<Package> _parseBlueBook(List responseBody) {
     List<Package> list = [];
-    for( var item in responseBody )
-    {
+    for (var item in responseBody) {
       list.add(Package.fromJson(item));
     }
 
     return list;
   }
-
 }
 
 _Package PackageApi = Get.put(_Package());

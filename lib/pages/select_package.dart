@@ -122,6 +122,7 @@ class _PackageFormState extends State<PackageForm> {
   Utils utils = Utils();
   bool isAvailable = false;
   String? selectedPackageId;
+  String? selectedAppStorePackageId;
 
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   final List<PurchaseDetails> _purchases = [];
@@ -129,16 +130,18 @@ class _PackageFormState extends State<PackageForm> {
   List<ProductDetails> _products = [];
   StreamSubscription<List<PurchaseDetails>>? _subscription;
 
-  void _handleSubmit() {
+  Future<void> _handleSubmit() async {
     if (selectedPackageId == null) {
       utils.showToast("Error", "Select a package first.");
       return;
     }
     if (Platform.isIOS) {
+     
       if (isAvailable) {
-        _subscribe(
-            product: selectedPackageId == "2"?
-             _products[1] : _products[0]);
+       _subscribe(
+            product: _products.firstWhere(
+          (product) => product.id == selectedAppStorePackageId,
+        ));
       } else {
         utils.showToast("Sorry", "This product is currently unavailable");
       }
@@ -165,12 +168,14 @@ class _PackageFormState extends State<PackageForm> {
 
   intilizeIosPayment() async {
     isAvailable = await _inAppPurchase.isAvailable();
-    List<ProductDetails> products = await _getProducts(
-      productIds: <String>{
-        "bourboneur_monthly_subscription",
-        "bourboneur_yearly_subscription"
-      },
-    );
+    Set<String> appleStoreIds = {};
+    for (var package in controller.packages) {
+      if (package.appleStoreId != null) {
+        appleStoreIds.add(package.appleStoreId!);
+      }
+    }
+    List<ProductDetails> products =
+        await _getProducts(productIds: appleStoreIds);
 
     _products = products;
 
@@ -179,7 +184,6 @@ class _PackageFormState extends State<PackageForm> {
     _subscription = purchaseUpdated.listen((purchaseDetailsList) {
       _listenToPurchaseUpdated(purchaseDetailsList);
     }, onDone: () {
-     
       _subscription!.cancel();
     }, onError: (error) {
       print(error.toString());
@@ -192,32 +196,22 @@ class _PackageFormState extends State<PackageForm> {
       purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
         switch (purchaseDetails.status) {
           case PurchaseStatus.pending:
-            // await _inAppPurchase
-            //     .completePurchase(purchaseDetails)Gondal@747
-            //     .onError((error, stackTrace) {
-            //   EasyLoading.showError(error.toString());
-            // });
+           
+        
             break;
           case PurchaseStatus.purchased:
-            // if (purchaseDetails.productID ==
-            //     "bourboneur_monthly_subscription") {
-            //   log("Purchasd");
-            //   utils.showToast("Success", "SUCCESSFULLY PURCHASED MONTHLY PLAN");
-            // } else {
-            //   log("Purchasd");
-            //   utils.showToast("Success", "SUCCESSFULLY PURCHASED YEARLY PLAN");
-            // }
+          await PackageApi.subscribe(
+          controller.user.value.id!, purchaseDetails.productID,purchaseDetails.purchaseID.toString());
+         
             break;
           case PurchaseStatus.restored:
-            // log("enter");
+            await PackageApi.subscribe(
+          controller.user.value.id!, purchaseDetails.productID,purchaseDetails.purchaseID.toString());
 
-            // EasyLoading.showSuccess("SUCCESSFULLY Restore");
+          
             break;
           case PurchaseStatus.error:
-            // print('asdasdasdasd:${purchaseDetails.error!.message}');
-            // utils.showToast("Error", purchaseDetails.error!.message);
-            // if (purchaseDetails.error!.message ==
-            //     'BillingResponse.itemAlreadyOwned') {}
+          
 
             break;
           default:
@@ -235,8 +229,6 @@ class _PackageFormState extends State<PackageForm> {
   }
 
   Future<void> _subscribe({required ProductDetails product}) async {
-    //  Utils utils = Utils();
-    utils.showToast("Test Purchase id", product.id.toString());
     late PurchaseParam purchaseParam;
     try {
       purchaseParam = PurchaseParam(productDetails: product);
@@ -384,6 +376,7 @@ class _PackageFormState extends State<PackageForm> {
         onTap: (Package package) {
           setState(() {
             selectedPackageId = package.id;
+            selectedAppStorePackageId = package.appleStoreId;
           });
           //  Get.off(() => CapturePaymentDetails(
           //     packageId: package.id!,
