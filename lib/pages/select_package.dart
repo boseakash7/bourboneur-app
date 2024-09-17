@@ -9,6 +9,7 @@ import 'package:bourboneur/Core/Controllers/Package.dart';
 import 'package:bourboneur/Core/Utils.dart';
 import 'package:bourboneur/common/custom_button.dart';
 import 'package:bourboneur/pages/capture_payment_details.dart';
+import 'package:bourboneur/pages/page_helpers/open_dashboard.dart';
 import 'package:bourboneur/pages/sign_in.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../Core/Apis/User.dart';
 
 class SelectPackagePage extends StatefulWidget {
   const SelectPackagePage({super.key});
@@ -136,9 +139,10 @@ class _PackageFormState extends State<PackageForm> {
       return;
     }
     if (Platform.isIOS) {
-     
       if (isAvailable) {
-       _subscribe(
+       
+        utils.showLoadingDialog();
+        _subscribe(
             product: _products.firstWhere(
           (product) => product.id == selectedAppStorePackageId,
         ));
@@ -196,25 +200,32 @@ class _PackageFormState extends State<PackageForm> {
       purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
         switch (purchaseDetails.status) {
           case PurchaseStatus.pending:
-           
-        
             break;
           case PurchaseStatus.purchased:
-          await PackageApi.subscribe(
-          controller.user.value.id!, purchaseDetails.productID,purchaseDetails.purchaseID.toString());
-         
+            await PackageApi.subscribe(controller.user.value.id!,
+                selectedPackageId!, purchaseDetails.purchaseID.toString());
+            await UserApi.getById(controller.user.value.id!);
+             utils.hideLoadingDialog();
+            Get.offAll(() => openDashboard(controller.user.value));
+            utils.showToast(
+                "Success", "Your package has been activated, enjoy!");
+
             break;
           case PurchaseStatus.restored:
-            await PackageApi.subscribe(
-          controller.user.value.id!, purchaseDetails.productID,purchaseDetails.purchaseID.toString());
+            await PackageApi.subscribe(controller.user.value.id!,
+                selectedPackageId!, purchaseDetails.purchaseID.toString());
+            await UserApi.getById(controller.user.value.id!);
+            utils.hideLoadingDialog();
+            Get.offAll(() => openDashboard(controller.user.value));
+            utils.showToast(
+                "Success", "Your package has been activated, enjoy!");
 
-          
             break;
           case PurchaseStatus.error:
-          
-
+          utils.hideLoadingDialog();
             break;
           default:
+          utils.hideLoadingDialog();
             break;
         }
 
@@ -235,7 +246,7 @@ class _PackageFormState extends State<PackageForm> {
       // _inAppPurchase
       _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
     } catch (e) {
-      EasyLoading.showError(e.toString());
+      
     }
   }
 

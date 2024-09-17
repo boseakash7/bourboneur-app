@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bourboneur/Core/Apis/Auth.dart';
 import 'package:bourboneur/Core/Controller.dart';
 import 'package:bourboneur/pages/delete_account.dart';
@@ -12,6 +14,7 @@ import 'package:bourboneur/pages/wheel_of_destiny.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginWrapper extends StatefulWidget {
   LoginWrapper({super.key, required this.child });
@@ -125,6 +128,9 @@ class _MenuState extends State<Menu> {
             Get.to(() => Blog());
           }),
           MenuItem(text: 'Billing', onTap: () {
+            Platform.isIOS?
+            launchUrl(Uri.parse("https://apps.apple.com/account/subscriptions"))
+            :
             Get.to(() => PortalPage());
           }),
           MenuItem(text: 'Logout', onTap: () {
