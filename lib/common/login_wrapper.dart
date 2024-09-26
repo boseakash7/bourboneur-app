@@ -2,16 +2,18 @@ import 'dart:io';
 
 import 'package:bourboneur/Core/Apis/Auth.dart';
 import 'package:bourboneur/Core/Controller.dart';
+import 'package:bourboneur/pages/delete_account.dart';
 import 'package:bourboneur/pages/blog.dart';
 import 'package:bourboneur/pages/bluebook.dart';
 import 'package:bourboneur/pages/dashboard.dart';
-import 'package:bourboneur/pages/delete_account.dart';
 import 'package:bourboneur/pages/explore.dart';
 import 'package:bourboneur/pages/good_pour.dart';
+import 'package:bourboneur/pages/ios_subscription_page.dart';
 import 'package:bourboneur/pages/portal.dart';
 import 'package:bourboneur/pages/sign_in.dart';
 import 'package:bourboneur/pages/wheel_of_destiny.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -38,11 +40,11 @@ class _LoginWrapperState extends State<LoginWrapper> {
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return const Menu();
+                    return Menu();
                   });
             },
             child: Container(
-              color: Theme.of(context).colorScheme.surface,
+              color: Theme.of(context).colorScheme.background,
               padding: const EdgeInsets.all(15.0),
               child: const Icon(Icons.menu, color: Color(0xFFf47c1a), size: 30),
             ),
@@ -67,7 +69,8 @@ class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
+      decoration:
+          BoxDecoration(color: Theme.of(context).colorScheme.background),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -87,7 +90,7 @@ class _MenuState extends State<Menu> {
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
-                        color: const Color(0xfff47c1a)),
+                        color: Color(0xfff47c1a)),
                   ),
                   Text(
                     controller.user.value.email!,
@@ -102,7 +105,7 @@ class _MenuState extends State<Menu> {
                           fontWeight: FontWeight.normal,
                           fontStyle: FontStyle.italic,
                           fontSize: 14,
-                          color: const Color(0xfff47c1a)))
+                          color: Color(0xfff47c1a)))
                 ],
               ),
             ),
@@ -110,12 +113,12 @@ class _MenuState extends State<Menu> {
           MenuItem(
               text: 'Home',
               onTap: () {
-                Get.offAll(() => const DashboardPage());
+                Get.offAll(() => DashboardPage());
               }),
           MenuItem(
             text: 'Bourbon Blue Book',
             onTap: () {
-              Get.to(() => const BlueBook());
+              Get.to(() => BlueBook());
             },
           ),
           MenuItem(
@@ -126,12 +129,12 @@ class _MenuState extends State<Menu> {
           MenuItem(
               text: 'Explore your bourbon',
               onTap: () {
-                Get.to(() => const ExplorePage());
+                Get.to(() => ExplorePage());
               }),
           MenuItem(
               text: 'Bourbon Suggestions',
               onTap: () {
-                Get.to(() => const GoodPourPage());
+                Get.to(() => GoodPourPage());
               }),
           MenuItem(
               text: 'Bourbon Blog',
@@ -141,19 +144,21 @@ class _MenuState extends State<Menu> {
           MenuItem(
               text: 'Billing',
               onTap: () {
-                if (controller.user.value.lastPaymentMethod == null) {
-                  Platform.isAndroid
-                      ? Get.to(() => const PortalPage())
-                      : launchUrl(Uri.parse(
+                if(controller.user.value.lastPaymentMethod == null){
+                  Platform.isAndroid?
+                  Get.to(() => PortalPage())
+                  : launchUrl(Uri.parse(
                           "https://apps.apple.com/account/subscriptions"));
-                } else if (Platform.isAndroid &&
+                }
+                else if (Platform.isAndroid &&
                     controller.user.value.lastPaymentMethod == "apple_in_app") {
-                  utils.showToast("Sorry",
-                      "Looks like you have purchased the subscription on apple device. Please open App Store to manage your subscription.");
-                } else if (controller.user.value.lastPaymentMethod ==
-                    "stripe") {
-                  Get.to(() => const PortalPage());
-                } else {
+                 Get.to(() => IosSubscriptionPage());
+                }
+                 else if (
+                    controller.user.value.lastPaymentMethod == "stripe") {
+                  Get.to(() => PortalPage());
+                }
+                 else {
                   launchUrl(Uri.parse(
                       "https://apps.apple.com/account/subscriptions"));
                 }
@@ -162,7 +167,7 @@ class _MenuState extends State<Menu> {
               text: 'Logout',
               onTap: () {
                 Auth.logout();
-                Get.offAll(() => const SignInPage());
+                Get.offAll(() => SignInPage());
               }),
         ],
       ),
@@ -186,10 +191,11 @@ class MenuItem extends StatelessWidget {
       child: Container(
         padding:
             const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
-        decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
+        decoration:
+            BoxDecoration(color: Theme.of(context).colorScheme.background),
         child: Text(text,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: const Color(0xfff47c1a),
+                color: Color(0xfff47c1a),
                 fontWeight: FontWeight.bold,
                 fontSize: 22)),
       ),
