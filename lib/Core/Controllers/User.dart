@@ -1,6 +1,6 @@
 class User {
-  String? id;  
-  String? name;  
+  String? id;
+  String? name;
   String? email;
   String? packageId;
   String? customerId;
@@ -9,6 +9,7 @@ class User {
   String? packageType;
   String? packagePrice;
   String? subscriptionType;
+  String? lastPaymentMethod;
   String? subscriptionStatus;
 
   User(
@@ -22,19 +23,22 @@ class User {
       this.packageType,
       this.packagePrice,
       this.subscriptionType,
+      this.lastPaymentMethod,
       this.subscriptionStatus});
 
   User.fromJson(json) {
     id = json['id'].toString();
     name = json['name'];
-    email = json['email'];    
-    packageId = json['package_id'] != null ? json['package_id'].toString() : null;
+    email = json['email'];
+    packageId =
+        json['package_id'] != null ? json['package_id'].toString() : null;
     paymentMethodId = json['payment_method_id'];
     customerId = json['customer_id'];
     status = json['status'];
     packageType = json['package_type'];
     packagePrice = json['package_price'];
     subscriptionType = json['subscription_type'];
+    lastPaymentMethod = json['last_payment_method'];
     subscriptionStatus = json['subscription_status'];
   }
 
@@ -49,7 +53,8 @@ class User {
       "status": status,
       "package_type": packageType,
       "package_price": packagePrice,
-      "subscription_type": subscriptionType, 
+      "subscription_type": subscriptionType,
+      "last_payment_method": lastPaymentMethod,
       "subscription_status": subscriptionStatus
     };
   }

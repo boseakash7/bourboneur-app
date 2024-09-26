@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bourboneur/Core/BaseApi.dart';
 import 'package:bourboneur/Core/Controllers/Package.dart';
@@ -31,15 +32,17 @@ class _Package extends BaseApi {
     var data = {
       "user_id": userId,
       "unique_id": uniqueId,
-      "package_id": packageId
+      "package_id": packageId,
+      "payment_method": Platform.isIOS ? 'apple_in_app' : 'stripe'
     };
+
     var response = await sendPost(Subscribe,  data);
     if (response == null ) return false;
     if ( response.body['code'] != 'OK' ) {
       utils.showToast("Error", response.body['data']);
       return false;
     }
-utils.showToast("Success", "You have successfully subcribed to our premium plan");
+    utils.showToast("Success", "You have successfully subscribed to our premium plan");
     
 
     return true;
