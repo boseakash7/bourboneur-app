@@ -199,33 +199,31 @@ class _PackageFormState extends State<PackageForm> {
     try {
       purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
         switch (purchaseDetails.status) {
+
           case PurchaseStatus.pending:
-            break;
-          case PurchaseStatus.purchased:
-            await PackageApi.subscribe(controller.user.value.id!,
-                selectedPackageId!, purchaseDetails.purchaseID.toString());
-            await UserApi.getById(controller.user.value.id!);
-             utils.hideLoadingDialog();
-            Get.offAll(() => openDashboard(controller.user.value));
-            utils.showToast(
-                "Success", "Your package has been activated, enjoy!");
 
             break;
+
+          case PurchaseStatus.purchased:
           case PurchaseStatus.restored:
-            await PackageApi.subscribe(controller.user.value.id!,
-                selectedPackageId!, purchaseDetails.purchaseID.toString());
+
+            await PackageApi.subscribe(controller.user.value.id!,selectedPackageId!, purchaseDetails.purchaseID.toString());
             await UserApi.getById(controller.user.value.id!);
+            
             utils.hideLoadingDialog();
             Get.offAll(() => openDashboard(controller.user.value));
-            utils.showToast(
-                "Success", "Your package has been activated, enjoy!");
+            utils.showToast("Success", "Your package has been activated, enjoy!");
 
             break;
+
           case PurchaseStatus.error:
-          utils.hideLoadingDialog();
+
+            utils.hideLoadingDialog();
             break;
+
           default:
-          utils.hideLoadingDialog();
+
+            utils.hideLoadingDialog();
             break;
         }
 

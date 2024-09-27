@@ -6,8 +6,10 @@ import 'package:bourboneur/Core/Controllers/Package.dart';
 import 'package:get/get.dart';
 
 class _Package extends BaseApi {
+
   static String GET_ALL = 'package/get-all';
   static String Subscribe = 'package/subscribe';
+
   Future<dynamic> all() async {
     var response = await sendGet(GET_ALL);
     if (response == null) return false;
@@ -22,8 +24,9 @@ class _Package extends BaseApi {
     controller.packages.addAll(cList);
 
     return true;
-  }
- Future<dynamic> subscribe(
+}
+
+Future<dynamic> subscribe(
     String userId,
     String packageId,
     String uniqueId
@@ -48,14 +51,7 @@ class _Package extends BaseApi {
     return true;
   }
 
-  List<Package> _parseBlueBook(List responseBody) {
-    List<Package> list = [];
-    for (var item in responseBody) {
-      list.add(Package.fromJson(item));
-    }
 
-    return list;
-  }
 }
 
 _Package PackageApi = Get.put(_Package());
