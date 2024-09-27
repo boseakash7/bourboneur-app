@@ -51,7 +51,14 @@ Future<dynamic> subscribe(
     return true;
   }
 
+  List<Package> _parseBlueBook(List responseBody) {
+    List<Package> list = [];
+    for (var item in responseBody) {
+      list.add(Package.fromJson(item));
+    }
 
+    return list;
+  }
 }
 
 _Package PackageApi = Get.put(_Package());
