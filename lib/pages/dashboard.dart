@@ -2,6 +2,7 @@ import 'package:bourboneur/Core/Controller.dart';
 import 'package:bourboneur/common/login_wrapper.dart';
 import 'package:bourboneur/pages/blog.dart';
 import 'package:bourboneur/pages/bluebook.dart';
+import 'package:bourboneur/pages/chart_page.dart';
 import 'package:bourboneur/pages/explore.dart';
 import 'package:bourboneur/pages/good_pour.dart';
 import 'package:bourboneur/pages/select_package.dart';
@@ -60,6 +61,13 @@ class _DashboardPageState extends State<DashboardPage> {
                   height: 1.2         
                 ),
             ),
+          ),
+          DashBoardLinkItem(
+            text: "My Bottles",
+            color: const Color(0xFFbe6720),
+            onTap: () {
+              Get.to(() => ChooseBottleWhiskey() );
+            },
           ),
           DashBoardLinkItem(
             text: "Bourbon Blue Book",

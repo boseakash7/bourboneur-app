@@ -140,12 +140,10 @@ class _PackageFormState extends State<PackageForm> {
     }
     if (Platform.isIOS) {
       if (isAvailable) {
-       
-        utils.showLoadingDialog();
         _subscribe(
             product: _products.firstWhere(
-          (product) => product.id == selectedAppStorePackageId,
-        ));
+            (product) => product.id == selectedAppStorePackageId,
+          ));
       } else {
         utils.showToast("Sorry", "This product is currently unavailable");
       }
@@ -240,11 +238,14 @@ class _PackageFormState extends State<PackageForm> {
   Future<void> _subscribe({required ProductDetails product}) async {
     late PurchaseParam purchaseParam;
     try {
+      utils.showLoadingDialog();
       purchaseParam = PurchaseParam(productDetails: product);
       // _inAppPurchase
       _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
     } catch (e) {
-      
+       utils.hideLoadingDialog();
+        utils.showToast("Sorry", e.toString());
+      //  utils.showToast("Sorry", "Looks like we were not able to open in app purchase");
     }
   }
 
