@@ -33,6 +33,7 @@ class _LoginWrapperState extends State<LoginWrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Image.asset('assets/images/logo.png', width: 150),
         actions: [
           GestureDetector(

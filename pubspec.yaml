@@ -48,6 +48,7 @@ dependencies:
   url_launcher: ^6.3.0
   webview_flutter: ^4.8.0
   in_app_purchase: ^3.1.13
+  fl_chart: ^0.69.0
 
 dev_dependencies:
   flutter_test:

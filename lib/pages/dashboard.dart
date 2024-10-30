@@ -66,7 +66,7 @@ class _DashboardPageState extends State<DashboardPage> {
             text: "My Bottles",
             color: const Color(0xFFbe6720),
             onTap: () {
-              Get.to(() => ChooseBottleWhiskey() );
+              Get.to(() => ChartPage() );
             },
           ),
           DashBoardLinkItem(
