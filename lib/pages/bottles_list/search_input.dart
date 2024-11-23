@@ -5,12 +5,14 @@ class BottlesSearchInput extends StatelessWidget {
     super.key,
     this.readOnly,
     this.autoFocus,
-    this.onTap
+    this.onTap,
+    this.onChange
   });
 
   bool? readOnly;
   bool? autoFocus;
   void Function()? onTap;
+  void Function(String)? onChange;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,7 @@ class BottlesSearchInput extends StatelessWidget {
     return TextField(
       // onChanged: _onSearchChanged,
       onTap: onTap,
+      onChanged: onChange,
       readOnly: readOnly != null && readOnly == true,
       autofocus: autoFocus != null && autoFocus == true,
       style: Theme.of(context)

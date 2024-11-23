@@ -5,11 +5,13 @@ class BottleListSort extends StatefulWidget {
   BottleListSort({
     super.key,
     required this.labels,
-    this.defaultSelected = 0
+    this.defaultSelected = 0,
+    this.onChange
   });
 
   List<String> labels;
   int defaultSelected;
+  void Function(int)? onChange;
 
   @override
   State<BottleListSort> createState() => _BottleListSortState();
@@ -49,6 +51,7 @@ class _BottleListSortState extends State<BottleListSort> {
           setState(() {
             selectedValue = widget.labels.indexOf(value);
           });
+          if ( widget.onChange != null ) widget.onChange!(selectedValue!);
         },
       );
     }).toList();

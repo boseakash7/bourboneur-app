@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:bourboneur/Core/Apis/Config.dart';
+import 'package:bourboneur/Core/Apis/Firebase.dart';
 import 'package:bourboneur/Core/Apis/User.dart';
 import 'package:bourboneur/Core/Controller.dart';
 import 'package:bourboneur/Core/Utils.dart';
 import 'package:bourboneur/pages/page_helpers/open_dashboard.dart';
 import 'package:bourboneur/pages/sign_in.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
@@ -45,25 +48,55 @@ class _SplashPageState extends State<SplashPage> {
 
   Future<void> _tryToLogin() async {
     String? id = await utils.getLocal('user_id');
+
+    bool moveToSignIn = false;
+
     if ( id == null ) {
-      Get.off(() => SignInPage());   
-      return;
-    }
+      moveToSignIn = true;
+    } else {
+      bool response = await UserApi.getById(id);
+      if ( !response ) {
+        utils.removeLocal('user_id');
+        moveToSignIn = true;
+        return;
+      }
+    }  
 
-    bool response = await UserApi.getById(id);
-    if ( !response ) {
-      utils.removeLocal('user_id');
+    // set up firebase 
+    _saveFirebaseToken(null);
+    FirebaseMessaging.instance.onTokenRefresh.listen(_saveFirebaseToken);
+   
+    
+
+    if ( moveToSignIn )
+    {
       Get.off(() => SignInPage());
-      return;
+    } else {
+      Get.off(() => openDashboard(controller.user.value));
     }
-
-    Get.off(() => openDashboard(controller.user.value));
 
   }
 
   Future<void> _getConfig() async {
     bool response = await ConfigApi.all();
-  }  
+  }
+
+  Future<void> _saveFirebaseToken(String? token) async {
+    Controller controller = Get.find<Controller>();
+    // Get the token each time the application loads
+    token ??= await FirebaseMessaging.instance.getToken();
+
+    // Save the initial token to the database
+    if ( token != null )
+    {
+      String? userId = controller.user.value.id;
+      await FirebaseApi.storeFCM(userId, token);
+    }
+
+     // also subscribe to firebase topic
+     await FirebaseMessaging.instance.subscribeToTopic('uncategorized');
+    
+  }
 
   @override
   Widget build(BuildContext context) {

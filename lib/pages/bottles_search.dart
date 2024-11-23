@@ -1,12 +1,20 @@
+import 'dart:async';
+import 'dart:isolate';
+
+import 'package:bourboneur/Core/Apis/Bluebook.dart';
+import 'package:bourboneur/Core/Apis/Collection.dart';
+import 'package:bourboneur/Core/Controller.dart';
+import 'package:bourboneur/Core/Controllers/BlueBooks.dart';
+import 'package:bourboneur/Core/Utils.dart';
 import 'package:bourboneur/common/login_wrapper.dart';
+import 'package:bourboneur/pages/bottles_list/bottle_create.dart';
+import 'package:bourboneur/pages/bottles_list/bottle_confirm_popup.dart';
 import 'package:bourboneur/pages/bottles_list/search_input.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class BottlesSearchPage extends StatefulWidget {
-  BottlesSearchPage({
-    super.key,
-    this.isWishList
-  });
+  BottlesSearchPage({super.key, this.isWishList});
 
   bool? isWishList;
 
@@ -15,36 +23,111 @@ class BottlesSearchPage extends StatefulWidget {
 }
 
 class _BottlesSearchPageState extends State<BottlesSearchPage> {
-  List<String> items = [
-    "Daniel Weller",
-    "Weller 12 Year (1.75L)",
-    "Weller 12 Year (1L)",
-    "Weller 12 Year (700ml)",
-    "Weller 12 Year (750ml)",
-    "Weller Antique 107 (1.75L)",
-    "Weller Antique 107 (1.75L) SP",
-    "Weller Antique 107 (750ml)"
-  ];
+  Timer? _debounce;
+  String? keyword;
+
+  Controller controller = Get.find<Controller>();
+  bool isListLoading = false;
+
+  bool isConfirmLoading = false;
+
+  @override
+  void initState() {
+    getListData(1);
+
+    super.initState();
+  }
+
+  _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      keyword = query;
+      getListData(1);
+    });
+  }
+
+  _handleConfirm(String id) async {
+    Navigator.pop(context);
+    setState(() {
+      isConfirmLoading = true;
+    });
+
+    CollectionType type = widget.isWishList! ? CollectionType.wishlist : CollectionType.normal;
+    await CollectionApi.add(id, controller.user.value.id, type);
+    setState(() {
+      isConfirmLoading = false;
+    });    
+    Navigator.pop(context);
+    Utils().showToast("Success", "You bottle is now added.");
+  }
+
+  void getListData(page) async {
+    if (isListLoading) return;
+
+    setState(() {
+      isListLoading = true;
+    });
+
+    bool response = await BlueBookApi.all(page.toString(), keyword, "20");
+    if (!response) {
+      setState(() {
+        isListLoading = false;
+      });
+      return;
+    }
+
+    setState(() {
+      isListLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return LoginWrapper(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(17),
-          child: Column(
-            children: [
-              BottlesSearchInput(
-                autoFocus: true,
+      child: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(17),
+              child: Column(
+                children: [
+                  BottlesSearchInput(
+                    autoFocus: true,
+                    onChange: _onSearchChanged,
+                    onTap: () {},
+                  ),
+                  const SizedBox(height: 20),
+                  if (isListLoading)
+                    const CircularProgressIndicator(
+                      strokeCap: StrokeCap.round,
+                      strokeWidth: 3,
+                      color: Color(0xffe17f2f),
+                    ),
+                  if (!isListLoading)
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: _prepareListItems())
+                ],
               ),
-              const SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: _prepareListItems(),
-              )
-            ],
+            ),
           ),
-        ),
+          if ( isConfirmLoading )
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            color: const Color.fromARGB(52, 0, 0, 0),
+            child: const Center(
+              child: SizedBox(
+                width: 30,
+                height: 30,
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  color: Color(0xffe17f2f),
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -52,16 +135,15 @@ class _BottlesSearchPageState extends State<BottlesSearchPage> {
   List<Widget> _prepareListItems() {
     List<Widget> data = [];
     // int i = 0;
-    data.addAll(items.map((String value) {
+    data.addAll(controller.bluebooks.map((BlueBook value) {
       // i++;
       return BottleSearchItem(
-        text: value,
+        text: value.bottleName!,
         onTap: () {
           _showConfirm(
-              value: value,
+              value: value.bottleName!,
               onConfirm: () {
-                Navigator.pop(context);
-                print("Confirm " + value);
+                _handleConfirm(value.id!);
               });
         },
         // isAdded: i % 3 != 0,
@@ -69,12 +151,15 @@ class _BottlesSearchPageState extends State<BottlesSearchPage> {
     }).toList());
 
     data.add(GestureDetector(
+      onTap: () {
+        _showCreate();
+      },
       child: const Row(children: [
         Expanded(
           child: Text(
             "DON'T SEE IT?  ADD YOUR OWN",
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 18, height: 2, color: Color(0xffe17f2f)),
           ),
         ),
@@ -90,61 +175,21 @@ class _BottlesSearchPageState extends State<BottlesSearchPage> {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            shape: ContinuousRectangleBorder(
-              side: const BorderSide(
-                width: 2,
-                color: Color(0xffe17f2f)
-              ),
-              borderRadius: BorderRadius.circular(0),
-            ),            
-            content: Container(
-              padding: const EdgeInsets.only(left: 0, top: 10, right: 0),
-              child: RichText( 
-                textAlign: TextAlign.center,               
-                text: TextSpan(
-                  text: "Add ",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold
-                  ),
-                  children: [
-                    TextSpan(
-                      text: value.toString(),
-                      style: const TextStyle(
-                        color: Color(0xffe17f2f)
-                      ),
-                    ),
-                    TextSpan(
-                      text: widget.isWishList != true ? " to your collection?" : " to your wishlist?"
-                    )
-                  ]
-                ),
-                
-            )),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, 'Cancel'),
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(
-                      color: Color(0xffe17f2f),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              TextButton(
-                onPressed: onConfirm,
-                child: const Text(
-                  'Ok',
-                  style: TextStyle(
-                      color: Color(0xffe17f2f),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                ),
-              )
-            ],
+          return BottleAddPopup(
+              value: value!,
+              isWishList: widget.isWishList!,
+              onConfirm: onConfirm);
+        });
+  }
+
+  Future<void> _showCreate({void Function()? onConfirm }) {
+    return showDialog(
+        context: context,        
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return BottleCreate(
+            isWishList: widget.isWishList!,
+            onConfirm: onConfirm
           );
         });
   }

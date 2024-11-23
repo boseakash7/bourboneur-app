@@ -1,10 +1,9 @@
-import 'package:bourboneur/common/custom_button.dart';
+import 'package:bourboneur/Core/Apis/Collection.dart';
+import 'package:bourboneur/Core/Controller.dart';
 import 'package:bourboneur/common/login_wrapper.dart';
 import 'package:bourboneur/pages/bottles_list.dart';
-import 'package:bourboneur/pages/chart_page/chart.dart';
 import 'package:bourboneur/pages/chart_page/chart_widget.dart';
 import 'package:bourboneur/pages/chart_page/choose_bottle_wiskey.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,6 +15,49 @@ class ChartPage extends StatefulWidget {
 }
 
 class _ChartPageState extends State<ChartPage> {
+  Controller controller = Get.find<Controller>();
+  List chartData = [];
+  String valuation = "0.00";
+  String ytd = "0.00";
+  String overall = "0.00";
+  List marketIndex = ['up', 00.00];
+
+  bool isChartLoading = true;
+
+  @override
+  void initState() {
+    getData();
+
+    super.initState();
+  }
+
+  getData() async {
+    Map<String, dynamic> data = await CollectionApi.getChartData(controller.user.value.id!);    
+    chartData = data['data'];
+
+    valuation = double.parse(data['last_price']).toStringAsFixed(2);
+    ytd = double.parse(data['trend_ytd']).toStringAsFixed(2);
+    overall = double.parse(data['trend_overall']).toStringAsFixed(2);
+
+    isChartLoading = false;
+
+    if ( data['index'] != null )
+    {
+      marketIndex.clear();
+      marketIndex.add(data['index']['trend']);
+      marketIndex.add(double.parse(data['index']['movement'].toString()).toStringAsFixed(2));
+      // marketIndex.add(double.parse(data['index']['movement'].toString()).toStringAsFixed(2));
+    }
+    setState(() {
+      
+    });
+
+  }
+
+  Future onBack(value) {
+    return getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return LoginWrapper(
@@ -25,8 +67,14 @@ class _ChartPageState extends State<ChartPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ChartWidget(),
-              SizedBox(
+              ChartWidget(
+                data: chartData,
+                isLoading: isChartLoading,
+                valuation: valuation,
+                ytd: ytd,
+                overall: overall
+              ),
+              const SizedBox(
                 height: 10,
               ),
               GestureDetector(
@@ -40,20 +88,22 @@ class _ChartPageState extends State<ChartPage> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(15))),
                     padding: const EdgeInsets.all(15),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
+                            if ( marketIndex.isNotEmpty )
                             Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Color(0xffe17f2f),
+                              marketIndex[0] == 'down' ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
+                              color: marketIndex[0] == 'down' ? Colors.red : const Color(0xffe17f2f),
                               size: 26,
                             ),
-                            Text("8.27% YTD",
+                            if ( marketIndex.isNotEmpty )
+                            Text("${marketIndex[1]}% YTD",
                                 textAlign: TextAlign.right,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontFamily: 'Arial',
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xffe17f2f),
@@ -62,10 +112,10 @@ class _ChartPageState extends State<ChartPage> {
                                     height: 1.2))
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
-                        Text("BOURBONEUR SECONDARY MARKET INDEX",
+                        const Text("BOURBONEUR SECONDARY MARKET INDEX",
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
                                     fontFamily: 'Arial',
@@ -77,12 +127,12 @@ class _ChartPageState extends State<ChartPage> {
                       ],
                     )),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => ChooseBottleWhiskey());
+                  Get.to(() => ChooseBottleWhiskey())?.then(onBack);
                 },
                 child: Container(
                     decoration: BoxDecoration(

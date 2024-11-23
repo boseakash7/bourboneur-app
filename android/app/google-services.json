@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "494958716962",
+    "project_id": "bourboneur",
+    "storage_bucket": "bourboneur.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:494958716962:android:705b2c8e9ba71b2fad427b",
+        "android_client_info": {
+          "package_name": "com.bourboneur.mobileapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCS6PTnB5KAHmqJ5OHm-MZiZOKF9mGHfQE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

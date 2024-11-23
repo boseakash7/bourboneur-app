@@ -1,47 +1,126 @@
+import 'package:bourboneur/Core/Apis/Collection.dart';
+import 'package:bourboneur/Core/Controller.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
+class Chart extends StatelessWidget {
+  Chart({
+    super.key,
+    required this.data
+  });
 
-class Chart extends StatefulWidget {
-  const Chart({super.key});
-
-  @override
-  State<Chart> createState() => _ChartState();
-}
-
-class _ChartState extends State<Chart> {
-  double maxPrice = 500;
-  double minPrice = 200;
+  double maxPrice = 0;
+  double minPrice = 0;
 
   double maxY = 8;
+  double maxX = 0;
+
+  String firstDate = "12-01-1";
+  String lastDate = "12-12-31";
+
+  List data;
 
   List<List<double>> prices = [
-    [10, 200],
-    [9, 201],
-    [8, 210],
-    [7, 260],
-    [6, 320],
-    [5.5, 370],
-    [5, 350],
-    [4.3, 470],
-    [3.7, 480],
-    [3, 490],
-    [2, 472]
+    // [10, 200],
+    // [9, 201],
+    // [8, 210],
+    // [7, 260],
+    // [6, 320],
+    // [5.5, 370],
+    // [5, 350],
+    // [4.3, 470],
+    // [3.7, 480],
+    // [3, 490],
+    // [1, 472]
   ];
 
   double? priceGap;
+  double? dayGap;
 
-  @override
-  void initState() {
-    prices = prices.reversed.toList();
-    priceGap = maxPrice - minPrice;
-    priceGap = (priceGap! / maxY).ceilToDouble();
 
-    super.initState();
+  _prepareData() {
+
+    if ( data.isNotEmpty )
+    {
+
+      DateTime first = DateTime.parse(data.first['date']);
+      DateTime last = DateTime.parse(data.last['date']);
+
+      var d = last.difference(first).inDays;      
+      int i = 0;
+
+      Map mapData = _listToMap(data);
+      double price = 0;      
+
+      while( i <= d ) {
+        String date = DateFormat('yyyy-MM-dd').format(first.add(Duration( days: i )));
+
+        if ( mapData.containsKey(date) ) {
+          price = double.parse(mapData[date]);
+        }
+
+        if ( maxPrice < price ) {
+          maxPrice = price.toDouble();
+        }
+
+        if ( minPrice > price ) {
+          minPrice = price.toDouble();
+        }
+
+        prices.add([i.toDouble(), price]);
+
+        i++;
+      }
+
+      // return;
+
+      // minPrice = double.parse(data.last['price']);
+
+      // data.forEach((element ) {
+
+      //   int price = int.parse(element['price']);
+      //   if ( maxPrice < price ) {
+      //     maxPrice = price.toDouble();
+      //   }
+
+      //   if ( minPrice > price ) {
+      //     minPrice = price.toDouble();
+      //   }
+
+      //   prices.add([i.toDouble(), double.parse(element['price'])]);
+
+      //   i++;
+
+      // });
+
+      maxX = d.toDouble();
+
+      
+      prices = prices.reversed.toList();
+      priceGap = maxPrice - minPrice;
+      priceGap = (priceGap! / maxY).ceilToDouble();
+      priceGap = priceGap == 0 ? 1 : priceGap;
+      dayGap = (maxX / 4).ceil().toDouble();
+    }
+
+    
+  }
+
+  Map<String, String> _listToMap( data ) {
+    Map<String, String> output = {};
+    data.forEach((element ) {
+      output[element['date']] = element['price'];
+    });
+
+    return output;
   }
 
   @override
   Widget build(BuildContext context) {
+    _prepareData();
+
     return LineChart(
       sampleData1,
       duration: const Duration(milliseconds: 250),
@@ -55,7 +134,7 @@ class _ChartState extends State<Chart> {
         borderData: borderData,
         lineBarsData: lineBarsData1,
         minX: 0,
-        maxX: 14,
+        maxX: maxX,
         maxY: maxPrice,
         minY: minPrice,
       );
@@ -69,8 +148,12 @@ class _ChartState extends State<Chart> {
       );
 
   FlTitlesData get titlesData1 => FlTitlesData(
-        bottomTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            interval: dayGap,
+            getTitlesWidget: bottomTitleWidgets
+          ),
         ),
         rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
@@ -82,9 +165,10 @@ class _ChartState extends State<Chart> {
           sideTitles: SideTitles(
               getTitlesWidget: leftTitleWidgets,
               showTitles: true,
-              interval: 50,
+              interval: priceGap,              
               reservedSize: 40,
-              minIncluded: true),
+              // minIncluded: true
+          ),
         ),
       );
 
@@ -99,10 +183,7 @@ class _ChartState extends State<Chart> {
       color: Colors.grey
     );
 
-    // print(value);
-
-    return Text('\$' + value.toInt().toString(),
-        style: style, textAlign: TextAlign.center);
+    return Text('\$' + value.toInt().toString(), style: style, textAlign: TextAlign.center);
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
@@ -110,26 +191,46 @@ class _ChartState extends State<Chart> {
       fontWeight: FontWeight.bold,
       fontSize: 16,
     );
-    Widget text;
-    switch (value.toInt()) {
-      case 2:
-        text = const Text('SEPT', style: style);
-        break;
-      case 7:
-        text = const Text('OCT', style: style);
-        break;
-      case 12:
-        text = const Text('DEC', style: style);
-        break;
-      default:
-        text = const Text('');
-        break;
-    }
+    // print(value);
+    // Widget text;    
+    // switch (value.toInt()) {
+    //   case 2:
+    //     text = const Text('SEPT', style: style);
+    //     break;
+    //   case 7:
+    //     text = const Text('OCT', style: style);
+    //     break;
+    //   case 12:
+    //     text = const Text('DEC', style: style);
+    //     break;
+    //   default:
+    //     text = const Text('');
+    //     break;
+    // }
+
+    String currentYear = DateTime.now().year.toString();
+    String startDate = "$currentYear-01-01";
+
+    DateTime date = DateTime.parse(startDate);
+    date = date.add(Duration(days: value.toInt()));
+
+    String formattedDate = DateFormat('MMMd').format(date);
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
+      // angle: 45,      
+      fitInside: SideTitleFitInsideData.disable(),
       space: 10,
-      child: text,
+      child: Padding(
+        padding: EdgeInsets.all(0),
+        child: Text(
+        formattedDate,
+        style: TextStyle(
+          fontSize: 10,
+          color: Colors.grey
+        ),
+      ),
+      ),
     );
   }
 
@@ -169,6 +270,8 @@ class _ChartState extends State<Chart> {
 
   LineChartBarData get lineChartBarData1_1 => LineChartBarData(
         isCurved: true,
+        // isStrokeJoinRound: true,
+        curveSmoothness: .05,
         color: Colors.red,
         barWidth: 2,
         isStrokeCapRound: true,

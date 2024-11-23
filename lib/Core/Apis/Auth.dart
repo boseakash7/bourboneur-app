@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bourboneur/Core/BaseApi.dart';
-import 'package:bourboneur/Core/Constants.dart';
 import 'package:bourboneur/Core/Controllers/User.dart';
 import 'package:get/get.dart';
 

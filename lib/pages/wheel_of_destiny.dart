@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:bourboneur/Core/Apis/Collection.dart';
 import 'package:bourboneur/Core/Apis/WOD.dart';
 import 'package:bourboneur/Core/Controller.dart';
+import 'package:bourboneur/Core/Controllers/Collection.dart';
 import 'package:bourboneur/Core/Utils.dart';
 import 'package:bourboneur/common/login_wrapper.dart';
 import 'package:bourboneur/pages/wheel_of_destiney/open_popup.dart';
@@ -22,7 +24,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class WheelOfDestiny extends StatefulWidget {
-  WheelOfDestiny({super.key});
+  WheelOfDestiny({
+    super.key,
+    this.exportCollection = false
+  });
+
+  bool exportCollection;
 
   @override
   State<WheelOfDestiny> createState() => _WheelOfDestinyState();
@@ -41,6 +48,7 @@ class _WheelOfDestinyState extends State<WheelOfDestiny> {
   bool isEditing = false;
   bool isSaveLoading = false;
   bool isOpenLoading = false;
+  bool isExporting = false;
   String? name;
   String? id;
 
@@ -50,12 +58,34 @@ class _WheelOfDestinyState extends State<WheelOfDestiny> {
   void initState() {
     getCreatedWheels();
 
+    if ( widget.exportCollection ) getCollections();
+    
     super.initState();
   }
 
   void getCreatedWheels() async {
     await WODApi.byUserId(controller.user.value.id!);
     setState(() {});
+  }
+
+  getCollections() async {
+    setState(() {
+      isExporting = true;
+    });
+    // only normal can be exported
+    await CollectionApi.all(controller.user.value.id!, CollectionType.normal);
+
+    // now loop 
+    List<String> items = controller.collections.map((element) {
+      return element.blueBook!.bottleName!; 
+    }).toList();
+    // now jkoin loop
+    String text = items.join("\n");
+    data.value = TextEditingValue(text: text);
+    _handleOnTextChange(text);
+    setState(() {
+      isExporting = false;
+    });
   }
 
   void _handleOnTextChange(String text) {

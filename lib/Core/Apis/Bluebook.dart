@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bourboneur/Core/BaseApi.dart';
 import 'package:bourboneur/Core/Controllers/BlueBooks.dart';
@@ -8,6 +7,7 @@ import 'package:get/get.dart';
 
 class _Bluebook extends BaseApi {
 
+  static String BLUEBOOK_CREATE = 'bluebook/create';
   static String BLUEBOOK_GET_ALL = 'bluebook/get-all-bluebooks';
   static String BLUEBOOK_LAST_UPDATED_AT = 'bluebook/get-last-update';
 
@@ -37,6 +37,29 @@ class _Bluebook extends BaseApi {
     controller.bluebooks.addAll(cList);
 
     return cList.isNotEmpty;
+  }
+
+  Future<dynamic> create(
+    String bottleName,
+    String bottlePrice,
+    String userId
+  ) async {
+
+    var data = {
+      "bottle_name": bottleName,
+      "bottle_price": bottlePrice,
+      "user_id": userId
+    };
+    var response = await sendPost(BLUEBOOK_CREATE, data);
+    if (response == null ) return false;
+    if ( response.body['code'] != 'OK' ) {
+      utils.showToast("Error", response.body['data']);
+      return false;
+    }
+
+    BlueBook bluebook = BlueBook.fromJson(response.body['data']);
+
+    return bluebook;
   }
 
   Future<dynamic> lastUpdatedAt() async {
