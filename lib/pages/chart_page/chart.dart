@@ -151,7 +151,7 @@ class Chart extends StatelessWidget {
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            interval: dayGap,
+            interval: dayGap! <= 0 ? null : dayGap,
             getTitlesWidget: bottomTitleWidgets
           ),
         ),
