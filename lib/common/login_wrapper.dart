@@ -32,6 +32,7 @@ class _LoginWrapperState extends State<LoginWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         centerTitle: true,
         title: Image.asset('assets/images/logo.png', width: 150),

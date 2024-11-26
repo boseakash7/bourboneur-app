@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:bourboneur/Core/BlogController.dart';
 import 'package:bourboneur/Core/Controller.dart';
+import 'package:bourboneur/firebase_options.dart';
 import 'package:bourboneur/pages/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ void main() async {
   SecurityContext context = SecurityContext.defaultContext;
   context.setTrustedCertificatesBytes(data.buffer.asUint8List());
 
-  FirebaseApp defaultApp = await Firebase.initializeApp();
+  FirebaseApp defaultApp = await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   Get.put(Controller(), permanent: true);
   Get.put(BlogController(), permanent: true);
@@ -84,7 +85,8 @@ class _MyAppState extends State<MyApp> {
             color: Color(0xffe17f2f)
           )
         ),
-        colorScheme: ColorScheme.fromSwatch(          
+        colorScheme: ColorScheme.fromSwatch(      
+              
           backgroundColor: Color(0xFF000000).withOpacity(1),          
         ),
         useMaterial3: true,        
