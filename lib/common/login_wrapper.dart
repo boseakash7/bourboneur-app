@@ -142,6 +142,7 @@ class _MenuState extends State<Menu> {
               onTap: () {
                 Get.to(() => Blog());
               }),
+          if ( controller.user.value.isFree != "1" )
           MenuItem(
               text: 'Billing',
               onTap: () {

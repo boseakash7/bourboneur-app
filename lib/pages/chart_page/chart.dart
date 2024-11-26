@@ -39,23 +39,26 @@ class Chart extends StatelessWidget {
   double? priceGap;
   double? dayGap;
 
+  DateTime? first;
+  DateTime? last;
+
 
   _prepareData() {
 
     if ( data.isNotEmpty )
     {
 
-      DateTime first = DateTime.parse(data.first['date']);
-      DateTime last = DateTime.parse(data.last['date']);
+      first = DateTime.parse(data.first['date']);
+      last = DateTime.parse(data.last['date']);
 
-      var d = last.difference(first).inDays;      
+      var d = last!.difference(first!).inDays;      
       int i = 0;
 
       Map mapData = _listToMap(data);
       double price = 0;      
 
       while( i <= d ) {
-        String date = DateFormat('yyyy-MM-dd').format(first.add(Duration( days: i )));
+        String date = DateFormat('yyyy-MM-dd').format(first!.add(Duration( days: i )));
 
         if ( mapData.containsKey(date) ) {
           price = double.parse(mapData[date]);
@@ -208,11 +211,11 @@ class Chart extends StatelessWidget {
     //     break;
     // }
 
-    String currentYear = DateTime.now().year.toString();
-    String startDate = "$currentYear-01-01";
+    // String currentYear = DateTime.now().year.toString();
+    // String startDate = DateFormat('yyyy-MM-dd').format(first);
 
-    DateTime date = DateTime.parse(startDate);
-    date = date.add(Duration(days: value.toInt()));
+    // DateTime date = DateTime.parse(startDate);
+    DateTime date = first!.add(Duration(days: value.toInt()));
 
     String formattedDate = DateFormat('MMMd').format(date);
 
