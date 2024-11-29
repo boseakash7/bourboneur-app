@@ -84,6 +84,7 @@ class _SignInPageState extends State<SignInPage> {
     // than having to individually change instances of widgets.
     return !isTryToLogin ? SafeArea(
       child: Scaffold(
+         backgroundColor: Theme.of(context).colorScheme.background,
           body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 30, right: 30, top: 20),
