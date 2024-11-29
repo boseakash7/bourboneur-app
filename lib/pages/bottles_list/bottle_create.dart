@@ -80,6 +80,7 @@ class _BottleCreateState extends State<BottleCreate> {
       return AlertDialog(
         
         actionsAlignment: MainAxisAlignment.center,
+        backgroundColor: Colors.black,
         shape: ContinuousRectangleBorder(
           side: const BorderSide(width: 2, color: Color(0xffe17f2f)),
           borderRadius: BorderRadius.circular(0),
@@ -87,7 +88,7 @@ class _BottleCreateState extends State<BottleCreate> {
         title: const Text(
           "CREATE A CUSTOM ENTRY",
           style: TextStyle(
-            color: Color(0xffe17f2f),
+            color: Colors.white,
             fontSize: 15,
             fontWeight: FontWeight.bold
           ),
@@ -133,8 +134,7 @@ class _BottleCreateState extends State<BottleCreate> {
                     fontSize: 14,
                     fontWeight: FontWeight.bold),
               ),
-            ),
-            Spacer(),
+            ),            
           if (!isLoading)
             TextButton(
               onPressed: () => Navigator.pop(context, 'Cancel'),
@@ -178,7 +178,7 @@ class BottleCreateInput extends StatelessWidget {
           style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.bold,
-            color: Colors.red
+            color: Colors.white
           )
         ),
         const SizedBox(
