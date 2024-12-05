@@ -122,7 +122,7 @@ class _BlueBookState extends State<BlueBook> {
                       
                       child: Transform.translate(
                         offset: Offset(2, -5),
-                        child: Text('™', style: TextStyle(
+                        child: Text('®', style: TextStyle(
                           fontSize: 25
                         ),),
                       ),

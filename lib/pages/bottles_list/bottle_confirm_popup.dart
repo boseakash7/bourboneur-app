@@ -14,6 +14,7 @@ class BottleConfirmPopup extends StatelessWidget {
         side: const BorderSide(width: 2, color: Color(0xffe17f2f)),
         borderRadius: BorderRadius.circular(0),
       ),
+      backgroundColor: Colors.black,
       content: Container(
           padding: const EdgeInsets.only(left: 0, top: 10, right: 0),
           child: text),
