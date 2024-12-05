@@ -102,6 +102,7 @@ class _BottleCreateState extends State<BottleCreate> {
                 BottleCreateInput(
                   label: "BOTTLE",
                   controller: controllerBottleName,
+                  keyboardType: TextInputType.text,
                 ),
                 const SizedBox(
                   height: 30,
@@ -109,6 +110,7 @@ class _BottleCreateState extends State<BottleCreate> {
                 BottleCreateInput(
                   label: "PRICE",
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.number,
                   controller: controllerBottlePrice,
                 )
               ],
@@ -159,12 +161,14 @@ class BottleCreateInput extends StatelessWidget {
     super.key,
     this.controller,
     required this.label,
-    this.inputFormatters
+    this.inputFormatters,
+    this.keyboardType
   });
 
   TextEditingController? controller;
   String label;
   List<TextInputFormatter>? inputFormatters;
+  TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +189,7 @@ class BottleCreateInput extends StatelessWidget {
           height: 5,
         ),
         TextField(
-          keyboardType: TextInputType.number,  
+          keyboardType: keyboardType,  
           controller: controller,      
           maxLines: 1,
           inputFormatters: inputFormatters,

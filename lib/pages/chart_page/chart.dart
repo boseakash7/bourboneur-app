@@ -182,11 +182,19 @@ class Chart extends StatelessWidget {
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
       // fontWeight: FontWeight.bold,
-      fontSize: 13,
+      fontSize: 12,
       color: Colors.grey
     );
 
-    return Text('\$' + value.toInt().toString(), style: style, textAlign: TextAlign.center);
+    final NumberFormat formatter = NumberFormat.compact(
+      locale: 'en_us',      
+    )..maximumFractionDigits = 1;
+    final String formatted = formatter.format(value);
+
+    return Container(
+      width: 100,
+      child: Text('\$' + formatted, style: style, textAlign: TextAlign.center),
+    );
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
