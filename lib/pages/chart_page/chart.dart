@@ -106,6 +106,8 @@ class Chart extends StatelessWidget {
       priceGap = (priceGap! / maxY).ceilToDouble();
       priceGap = priceGap == 0 ? 1 : priceGap;
       dayGap = (maxX / 4).ceil().toDouble();
+      // print(dayGap);
+
     }
 
     
@@ -154,12 +156,18 @@ class Chart extends StatelessWidget {
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
+            reservedSize: 40,
+            maxIncluded: true,
+            minIncluded: true,
             interval: dayGap! <= 0 ? null : dayGap,
             getTitlesWidget: bottomTitleWidgets
           ),
         ),
         rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
+          sideTitles: SideTitles(
+            // showTitles: true,
+            // reservedSize: 50
+          ),
         ),
         topTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
@@ -228,7 +236,7 @@ class Chart extends StatelessWidget {
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
-      // angle: 45,      
+      angle: 45,      
       fitInside: SideTitleFitInsideData.disable(),
       space: 10,
       child: Padding(
