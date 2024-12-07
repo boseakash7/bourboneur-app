@@ -165,11 +165,12 @@ class Chart extends StatelessWidget {
           sideTitles: SideTitles(showTitles: false),
         ),
         leftTitles: AxisTitles(
-          sideTitles: SideTitles(
+          axisNameSize: 150,          
+          sideTitles: SideTitles(            
               getTitlesWidget: leftTitleWidgets,
               showTitles: true,
               interval: priceGap,              
-              reservedSize: 40,
+              reservedSize: 60,
               // minIncluded: true
           ),
         ),
@@ -189,12 +190,10 @@ class Chart extends StatelessWidget {
     final NumberFormat formatter = NumberFormat.compact(
       locale: 'en_us',      
     )..maximumFractionDigits = 1;
+    // formatter.maximumIntegerDigits = 2;    
     final String formatted = formatter.format(value);
 
-    return Container(
-      width: 100,
-      child: Text('\$' + formatted, style: style, textAlign: TextAlign.center),
-    );
+    return Text('\$' + formatted  , style: style, textAlign: TextAlign.center, overflow: TextOverflow.ellipsis);
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
