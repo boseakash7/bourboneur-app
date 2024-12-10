@@ -42,6 +42,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   _prepareToLaunch() async {
+    
     await _getConfig();
     await _tryToLogin(); 
   }
