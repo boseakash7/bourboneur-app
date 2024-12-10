@@ -52,11 +52,12 @@ class _BottlesSearchPageState extends State<BottlesSearchPage> {
       isConfirmLoading = true;
     });
 
-    CollectionType type = widget.isWishList! ? CollectionType.wishlist : CollectionType.normal;
+    CollectionType type =
+        widget.isWishList! ? CollectionType.wishlist : CollectionType.normal;
     await CollectionApi.add(id, controller.user.value.id, type);
     setState(() {
       isConfirmLoading = false;
-    });    
+    });
     Navigator.pop(context);
     Utils().showToast("Success", "You bottle is now added.");
   }
@@ -111,22 +112,22 @@ class _BottlesSearchPageState extends State<BottlesSearchPage> {
               ),
             ),
           ),
-          if ( isConfirmLoading )
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            color: const Color.fromARGB(52, 0, 0, 0),
-            child: const Center(
-              child: SizedBox(
-                width: 30,
-                height: 30,
-                child: CircularProgressIndicator(
-                  strokeWidth: 3,
-                  color: Color(0xffe17f2f),
+          if (isConfirmLoading)
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              color: const Color.fromARGB(52, 0, 0, 0),
+              child: const Center(
+                child: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                    color: Color(0xffe17f2f),
+                  ),
                 ),
               ),
-            ),
-          )
+            )
         ],
       ),
     );
@@ -159,8 +160,7 @@ class _BottlesSearchPageState extends State<BottlesSearchPage> {
           child: Text(
             "DON'T SEE IT?  ADD YOUR OWN",
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-                fontSize: 18, height: 2, color: Color(0xffe17f2f)),
+            style: TextStyle(fontSize: 18, height: 2, color: Color(0xffe17f2f)),
           ),
         ),
         SizedBox(width: 20),
@@ -182,15 +182,13 @@ class _BottlesSearchPageState extends State<BottlesSearchPage> {
         });
   }
 
-  Future<void> _showCreate({void Function()? onConfirm }) {
+  Future<void> _showCreate({void Function()? onConfirm}) {
     return showDialog(
-        context: context,        
+        context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
           return BottleCreate(
-            isWishList: widget.isWishList!,
-            onConfirm: onConfirm
-          );
+              isWishList: widget.isWishList!, onConfirm: onConfirm);
         });
   }
 }
@@ -206,25 +204,30 @@ class BottleSearchItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              text,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  fontSize: 18,
-                  height: 2,
-                  color: isAdded == true
-                      ? Colors.grey
-                      : Theme.of(context).textTheme.bodyMedium?.color),
+      child: Column(children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                text,
+                // overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    fontSize: 18,
+                    height: 2,
+                    color: isAdded == true
+                        ? Colors.grey
+                        : Theme.of(context).textTheme.bodyMedium?.color),
+              ),
             ),
-          ),
-          SizedBox(width: 20),
-          Icon(isAdded == true ? Icons.check_circle : Icons.add_circle,
-              color: isAdded == true ? Colors.grey : Color(0xffe17f2f))
-        ],
-      ),
+            SizedBox(width: 20),
+            Icon(isAdded == true ? Icons.check_circle : Icons.add_circle,
+                color: isAdded == true ? Colors.grey : Color(0xffe17f2f))
+          ],
+        ),
+        Divider(
+          color: const Color.fromARGB(255, 31, 31, 31),
+        )
+      ]),
     );
   }
 }
